@@ -1,4 +1,3 @@
-// types/payment.ts
 export type PaymentMethod = "cash" | "card";
 
 export type Payment = {

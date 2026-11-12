@@ -1,4 +1,3 @@
-// types/maintenance.ts
 export type Maintenance = {
   id: number;
   carName: string;

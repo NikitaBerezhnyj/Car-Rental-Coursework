@@ -1,4 +1,3 @@
-// types/employee.ts
 export type Employee = {
   id: number;
   firstName: string;

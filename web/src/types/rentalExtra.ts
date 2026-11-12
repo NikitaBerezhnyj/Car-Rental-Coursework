@@ -1,4 +1,3 @@
-// types/rentalExtra.ts
 export type RentalExtra = {
   id: string;
   rentalId: number;

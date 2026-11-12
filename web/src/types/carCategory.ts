@@ -1,4 +1,3 @@
-// types/carCategory.ts
 export type CarCategory = {
   id: number;
   name: string;

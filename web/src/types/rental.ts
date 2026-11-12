@@ -1,4 +1,3 @@
-// types/rental.ts
 export type RentalStatus = "booked" | "active" | "completed" | "cancelled";
 
 export type Rental = {
