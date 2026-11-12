@@ -1,0 +1,33 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.name {
+    color: var(--text);
+    font-weight: 500;
+}
+
+.price {
+    color: var(--text);
+    font-weight: 500;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.placeholder {
+    color: var(--text-disabled);
+}
+
+@media (max-width: 640px) {
+    .header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .header>a {
+        width: 100%;
+    }
+}
