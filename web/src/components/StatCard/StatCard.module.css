@@ -1,0 +1,35 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+.value {
+    margin: 0;
+    color: var(--text);
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.description {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.success {
+    border-color: var(--success);
+}
+
+.warning {
+    border-color: var(--warning);
+}
+
+.danger {
+    border-color: var(--danger);
+}
