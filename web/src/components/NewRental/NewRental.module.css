@@ -1,0 +1,263 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 32px;
+    max-width: 1000px;
+}
+
+.header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.title {
+    margin: 0;
+    color: var(--text);
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.subtitle {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.sectionTitle {
+    margin: 0;
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.label {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.input {
+    width: 100%;
+    min-height: 42px;
+    padding: 9px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.input:focus {
+    border-color: var(--primary);
+}
+
+.input:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.fieldsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.textLink {
+    width: fit-content;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.textLink:hover {
+    text-decoration: underline;
+}
+
+.services {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.service {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 42px;
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.service:hover {
+    background: var(--surface-hover);
+}
+
+.serviceInfo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbox {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.serviceName {
+    color: var(--text);
+    font-size: 14px;
+}
+
+.servicePrice {
+    color: var(--muted);
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.summary {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+}
+
+.summaryRows {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.summaryRow,
+.total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.summaryRow span:last-child,
+.total span:last-child {
+    color: var(--text);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.total {
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.total span:last-child {
+    color: var(--primary);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 4px;
+}
+
+.cancelButton,
+.submitButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0 18px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.cancelButton {
+    border-color: var(--border-strong);
+    background: var(--surface);
+    color: var(--text);
+}
+
+.cancelButton:hover {
+    background: var(--surface-hover);
+}
+
+.submitButton {
+    background: var(--primary);
+    color: var(--primary-text);
+}
+
+.submitButton:hover {
+    background: var(--primary-hover);
+}
+
+@media (max-width: 640px) {
+    .page {
+        padding: 20px 16px;
+    }
+
+    .fieldsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .actions {
+        flex-direction: column-reverse;
+    }
+
+    .cancelButton,
+    .submitButton {
+        width: 100%;
+    }
+
+    .summary {
+        padding: 16px;
+    }
+}
