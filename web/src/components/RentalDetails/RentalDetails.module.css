@@ -1,0 +1,274 @@
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.breadcrumbs a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+    text-decoration: underline;
+}
+
+.header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.heading {
+    min-width: 0;
+}
+
+.titleRow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.headerActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.section {
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+.sectionTitle {
+    margin: 0 0 22px;
+    color: var(--text);
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.detailsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 32px;
+}
+
+.detailItem {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.detailLabel {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.detailValue {
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 110px;
+    padding: 20px;
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius);
+    text-align: center;
+}
+
+.emptyState p {
+    margin: 0;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.emptyState span {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.paymentSummary {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 520px;
+}
+
+.paymentRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.paymentRow strong {
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.balanceRow {
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+    font-weight: 600;
+}
+
+.balanceRow strong {
+    font-size: 18px;
+}
+
+.sectionActions {
+    margin-top: 22px;
+}
+
+.note {
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.vehicleActions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+}
+
+.vehicleActions:first-of-type {
+    padding-top: 0;
+    border-top: none;
+}
+
+.actionDescription {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.actionDescription strong {
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.actionDescription span {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.primaryButton,
+.secondaryButton,
+.dangerButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 8px 14px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.primaryButton {
+    background: var(--primary);
+    color: var(--primary-text);
+}
+
+.secondaryButton {
+    border-color: var(--border-strong);
+    background: var(--surface);
+    color: var(--text);
+}
+
+.dangerButton {
+    border-color: var(--danger);
+    background: var(--surface);
+    color: var(--danger);
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled,
+.dangerButton:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.footer {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.backButton {
+    color: var(--primary);
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.backButton:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+    .header {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 650px) {
+    .detailsGrid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .section {
+        padding: 20px;
+    }
+
+    .vehicleActions {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .headerActions {
+        width: 100%;
+    }
+
+    .headerActions button {
+        flex: 1;
+    }
+}
+
+@media (max-width: 420px) {
+    .headerActions {
+        flex-direction: column;
+    }
+
+    .headerActions button {
+        width: 100%;
+    }
+}
