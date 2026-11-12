@@ -1,4 +1,3 @@
-// extraService.ts
 import type { IExtraRepository } from "@/repositories/interfaces/IExtraRepository";
 import type { Extra } from "@/types/extra";
 

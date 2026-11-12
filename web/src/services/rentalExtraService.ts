@@ -1,4 +1,3 @@
-// rentalExtraService.ts
 import type { IRentalExtraRepository } from "@/repositories/interfaces/IRentalExtraRepository";
 import type { RentalExtra } from "@/types/rentalExtra";
 

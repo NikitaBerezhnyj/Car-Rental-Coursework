@@ -1,7 +1,6 @@
-// rentalExtraRepository.ts
+import type { IRentalExtraRepository } from "./interfaces/IRentalExtraRepository";
 import { query } from "@/lib/db";
 import type { RentalExtra } from "@/types/rentalExtra";
-import type { IRentalExtraRepository } from "./interfaces/IRentalExtraRepository";
 
 type RentalExtraRow = {
   rental_id: number;
@@ -10,7 +9,6 @@ type RentalExtraRow = {
   price: string;
 };
 
-// Складений ключ таблиці (rental_id, service_id) збираємо в один рядок для UI
 const toRentalExtra = (row: RentalExtraRow): RentalExtra => ({
   id: `${row.rental_id}-${row.service_id}`,
   rentalId: row.rental_id,

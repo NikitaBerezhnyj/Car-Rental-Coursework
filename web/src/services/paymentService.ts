@@ -1,4 +1,3 @@
-// paymentService.ts
 import type { IPaymentRepository } from "@/repositories/interfaces/IPaymentRepository";
 import type { Payment } from "@/types/payment";
 

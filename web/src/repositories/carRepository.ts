@@ -1,6 +1,6 @@
 import { query } from "@/lib/db";
-import type { Car, CarStatus } from "@/types/car";
 import type { ICarRepository } from "@/repositories/interfaces/ICarRepository";
+import type { Car, CarStatus } from "@/types/car";
 
 type CarRow = {
   car_id: number;
@@ -10,7 +10,7 @@ type CarRow = {
   year: number;
   status: CarStatus;
   category_name: string;
-  daily_rate: string; // NUMERIC у pg повертається рядком
+  daily_rate: string;
 };
 
 const toCar = (row: CarRow): Car => ({

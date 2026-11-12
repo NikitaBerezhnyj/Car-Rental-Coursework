@@ -1,6 +1,6 @@
 import { query } from "@/lib/db";
-import type { Customer } from "@/types/customer";
 import type { ICustomerRepository } from "@/repositories/interfaces/ICustomerRepository";
+import type { Customer } from "@/types/customer";
 
 type CustomerRow = {
   customer_id: number;

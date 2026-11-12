@@ -1,7 +1,6 @@
 import "server-only";
-
-import { Pool, type QueryResultRow } from "pg";
 import { AppError } from "./errors";
+import { Pool, type QueryResultRow } from "pg";
 
 const globalForPg = globalThis as unknown as { pool?: Pool };
 

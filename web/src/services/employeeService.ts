@@ -1,4 +1,3 @@
-// employeeService.ts
 import type { IEmployeeRepository } from "@/repositories/interfaces/IEmployeeRepository";
 import type { Employee } from "@/types/employee";
 

@@ -1,7 +1,6 @@
-// paymentRepository.ts
+import type { IPaymentRepository } from "./interfaces/IPaymentRepository";
 import { query } from "@/lib/db";
 import type { Payment, PaymentMethod } from "@/types/payment";
-import type { IPaymentRepository } from "./interfaces/IPaymentRepository";
 
 type PaymentRow = {
   payment_id: number;

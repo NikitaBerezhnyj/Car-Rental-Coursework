@@ -1,4 +1,3 @@
-// carCategoryService.ts
 import type { ICarCategoryRepository } from "@/repositories/interfaces/ICarCategoryRepository";
 import type { CarCategory } from "@/types/carCategory";
 

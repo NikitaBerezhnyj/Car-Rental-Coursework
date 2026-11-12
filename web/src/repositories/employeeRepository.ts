@@ -1,7 +1,6 @@
-// employeeRepository.ts
+import type { IEmployeeRepository } from "./interfaces/IEmployeeRepository";
 import { query } from "@/lib/db";
 import type { Employee } from "@/types/employee";
-import type { IEmployeeRepository } from "./interfaces/IEmployeeRepository";
 
 type EmployeeRow = {
   employee_id: number;

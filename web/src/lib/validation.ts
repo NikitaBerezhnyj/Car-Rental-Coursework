@@ -1,5 +1,5 @@
-import type { z } from "zod";
 import { AppError } from "./errors";
+import type { z } from "zod";
 
 export function parseOrThrow<T extends z.ZodType>(
   schema: T,

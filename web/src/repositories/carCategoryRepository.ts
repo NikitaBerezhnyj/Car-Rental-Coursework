@@ -1,7 +1,6 @@
-// carCategoryRepository.ts
+import type { ICarCategoryRepository } from "./interfaces/ICarCategoryRepository";
 import { query } from "@/lib/db";
 import type { CarCategory } from "@/types/carCategory";
-import type { ICarCategoryRepository } from "./interfaces/ICarCategoryRepository";
 
 type CarCategoryRow = {
   category_id: number;

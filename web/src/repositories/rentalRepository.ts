@@ -1,7 +1,6 @@
-// rentalRepository.ts
+import type { IRentalRepository } from "./interfaces/IRentalRepository";
 import { query } from "@/lib/db";
 import type { Rental, RentalStatus } from "@/types/rental";
-import type { IRentalRepository } from "./interfaces/IRentalRepository";
 
 type RentalRow = {
   rental_id: number;

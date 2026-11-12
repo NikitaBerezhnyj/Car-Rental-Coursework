@@ -1,7 +1,6 @@
-// maintenanceRepository.ts
+import type { IMaintenanceRepository } from "./interfaces/IMaintenanceRepository";
 import { query } from "@/lib/db";
 import type { Maintenance } from "@/types/maintenance";
-import type { IMaintenanceRepository } from "./interfaces/IMaintenanceRepository";
 
 type MaintenanceRow = {
   maintenance_id: number;

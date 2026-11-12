@@ -1,7 +1,6 @@
-// extraRepository.ts
+import type { IExtraRepository } from "./interfaces/IExtraRepository";
 import { query } from "@/lib/db";
 import type { Extra } from "@/types/extra";
-import type { IExtraRepository } from "./interfaces/IExtraRepository";
 
 type ExtraRow = {
   service_id: number;
