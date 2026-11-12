@@ -1,12 +1,22 @@
 {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.organizeImports": "never"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "cSpell.words": [
+        "daterange",
         "dpage",
+        "geist",
         "healthcheck",
         "isready",
+        "nums",
         "pgadmin",
         "pgdata",
         "postgres",
         "postgresql",
+        "sonarjs",
         "WATCHPACK"
     ]
 }
