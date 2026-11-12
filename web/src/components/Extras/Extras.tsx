@@ -2,17 +2,12 @@ import styles from "./Extras.module.css";
 import type { Column } from "@/components/DataTable/DataTable";
 import { DataTable } from "@/components/DataTable/DataTable";
 import type { Extra } from "@/types/extra";
+import { formatCurrency } from "@/utils/currency";
 import Link from "next/link";
 
 type ExtrasProps = {
   extras: Extra[];
 };
-
-const currencyFormatter = new Intl.NumberFormat("uk-UA", {
-  style: "currency",
-  currency: "UAH",
-  maximumFractionDigits: 2
-});
 
 export function Extras({ extras }: ExtrasProps) {
   const columns: Column<Extra>[] = [
@@ -22,9 +17,7 @@ export function Extras({ extras }: ExtrasProps) {
     },
     {
       header: "Ціна за добу",
-      render: extra => (
-        <span className={styles.price}>{currencyFormatter.format(extra.dailyPrice)}</span>
-      )
+      render: extra => <span className={styles.price}>{formatCurrency(extra.dailyPrice)}</span>
     },
     {
       header: "Дії",

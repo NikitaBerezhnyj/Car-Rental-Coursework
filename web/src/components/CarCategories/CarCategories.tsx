@@ -2,17 +2,12 @@ import styles from "./CarCategories.module.css";
 import type { Column } from "@/components/DataTable/DataTable";
 import { DataTable } from "@/components/DataTable/DataTable";
 import type { CarCategory } from "@/types/carCategory";
+import { formatCurrency } from "@/utils/currency";
 import Link from "next/link";
 
 type CarCategoriesProps = {
   categories: CarCategory[];
 };
-
-const currencyFormatter = new Intl.NumberFormat("uk-UA", {
-  style: "currency",
-  currency: "UAH",
-  maximumFractionDigits: 2
-});
 
 export function CarCategories({ categories }: CarCategoriesProps) {
   const columns: Column<CarCategory>[] = [
@@ -22,9 +17,7 @@ export function CarCategories({ categories }: CarCategoriesProps) {
     },
     {
       header: "Тариф за добу",
-      render: category => (
-        <span className={styles.rate}>{currencyFormatter.format(category.dailyRate)}</span>
-      )
+      render: category => <span className={styles.rate}>{formatCurrency(category.dailyRate)}</span>
     },
     {
       header: "Дії",

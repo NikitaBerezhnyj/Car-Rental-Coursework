@@ -5,39 +5,13 @@ import styles from "./Maintenance.module.css";
 import type { Column } from "@/components/DataTable/DataTable";
 import { DataTable } from "@/components/DataTable/DataTable";
 import type { Maintenance as MaintenanceRecord } from "@/types/maintenance";
+import { formatCurrency } from "@/utils/currency";
+import { formatDate } from "@/utils/date";
 import Link from "next/link";
 
 type MaintenanceProps = {
   records: MaintenanceRecord[];
 };
-
-const currencyFormatter = new Intl.NumberFormat("uk-UA", {
-  style: "currency",
-  currency: "UAH",
-  maximumFractionDigits: 2
-});
-
-const dateFormatter = new Intl.DateTimeFormat("uk-UA", {
-  day: "2-digit",
-  month: "2-digit",
-  year: "numeric"
-});
-
-function formatDate(value: string | null): string {
-  if (!value) {
-    return "—";
-  }
-
-  // Дата у форматі YYYY-MM-DD має трактуватися як локальна,
-  // а не як UTC, щоб уникнути зсуву на попередній день.
-  const dateOnlyMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
-
-  const date = dateOnlyMatch
-    ? new Date(Number(dateOnlyMatch[1]), Number(dateOnlyMatch[2]) - 1, Number(dateOnlyMatch[3]))
-    : new Date(value);
-
-  return Number.isNaN(date.getTime()) ? "—" : dateFormatter.format(date);
-}
 
 export function Maintenance({ records }: MaintenanceProps) {
   const columns: Column<MaintenanceRecord>[] = [
@@ -56,11 +30,11 @@ export function Maintenance({ records }: MaintenanceProps) {
     },
     {
       header: "Завершення",
-      render: record => formatDate(record.endDate)
+      render: record => (record.endDate ? formatDate(record.endDate) : "—")
     },
     {
       header: "Вартість",
-      render: record => <span className={styles.cost}>{currencyFormatter.format(record.cost)}</span>
+      render: record => <span className={styles.cost}>{formatCurrency(record.cost)}</span>
     },
     {
       header: "Статус",

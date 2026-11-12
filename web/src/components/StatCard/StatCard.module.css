@@ -9,6 +9,13 @@
     box-shadow: var(--shadow);
 }
 
+.title {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 500;
+}
+
 .value {
     margin: 0;
     color: var(--text);

@@ -144,7 +144,7 @@ export default function Rentals({ rentals }: { rentals: Rental[] }) {
           value={statusFilter}
           onChange={event => setStatusFilter(event.target.value as RentalStatusFilter)}
         >
-          <option value="ALL">Усі статуси</option>
+          <option value="all">Усі статуси</option>
           <option value="booked">Зарезервовані</option>
           <option value="active">Активні</option>
           <option value="completed">Завершені</option>

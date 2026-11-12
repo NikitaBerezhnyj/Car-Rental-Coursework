@@ -5,6 +5,8 @@ import type { Column } from "@/components/DataTable/DataTable";
 import { DataTable } from "@/components/DataTable/DataTable";
 import type { Payment, PaymentMethod } from "@/types/payment";
 import type { Rental } from "@/types/rental";
+import { formatCurrency } from "@/utils/currency";
+import { formatDate } from "@/utils/date";
 import { useMemo, useState } from "react";
 
 type PaymentsProps = {
@@ -16,18 +18,6 @@ const METHOD_LABELS: Record<PaymentMethod, string> = {
   cash: "Готівка",
   card: "Картка"
 };
-
-const currencyFormatter = new Intl.NumberFormat("uk-UA", {
-  style: "currency",
-  currency: "UAH",
-  maximumFractionDigits: 2
-});
-
-const dateFormatter = new Intl.DateTimeFormat("uk-UA", {
-  day: "2-digit",
-  month: "2-digit",
-  year: "numeric"
-});
 
 export function Payments({ payments, rentals }: PaymentsProps) {
   const [search, setSearch] = useState("");
@@ -66,9 +56,7 @@ export function Payments({ payments, rentals }: PaymentsProps) {
     },
     {
       header: "Сума",
-      render: payment => (
-        <span className={styles.amount}>{currencyFormatter.format(payment.amount)}</span>
-      )
+      render: payment => <span className={styles.amount}>{formatCurrency(payment.amount)}</span>
     },
     {
       header: "Спосіб",
@@ -76,11 +64,7 @@ export function Payments({ payments, rentals }: PaymentsProps) {
     },
     {
       header: "Дата",
-      render: payment => {
-        const date = new Date(payment.paidAt);
-
-        return Number.isNaN(date.getTime()) ? "—" : dateFormatter.format(date);
-      }
+      render: payment => formatDate(payment.paidAt)
     }
   ];
 
