@@ -1,6 +1,8 @@
+import { LoadingState } from "@/components/LoadingState/LoadingState";
 import { RentalDetails } from "@/components/RentalDetails/RentalDetails";
 import { rentalService } from "@/container";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 type PageProps = {
   params: Promise<{
@@ -8,7 +10,7 @@ type PageProps = {
   }>;
 };
 
-export default async function RentalDetailsPage({ params }: PageProps) {
+async function RentalDetailsContent({ params }: PageProps) {
   const { id } = await params;
   const rentals = await rentalService.list();
 
@@ -19,4 +21,12 @@ export default async function RentalDetailsPage({ params }: PageProps) {
   }
 
   return <RentalDetails rental={rental} />;
+}
+
+export default function RentalDetailsPage({ params }: PageProps) {
+  return (
+    <Suspense fallback={<LoadingState message="Завантаження оренди..." />}>
+      <RentalDetailsContent params={params} />
+    </Suspense>
+  );
 }

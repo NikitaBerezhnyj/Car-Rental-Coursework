@@ -2,7 +2,7 @@ import "./globals.css";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import type { ReactNode } from "react";
+import { type ReactNode, Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +24,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="uk" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
         <div className="app-layout">
-          <Sidebar />
+          <Suspense fallback={null}>
+            <Sidebar />
+          </Suspense>
           <div className="app-content">{children}</div>
         </div>
       </body>
