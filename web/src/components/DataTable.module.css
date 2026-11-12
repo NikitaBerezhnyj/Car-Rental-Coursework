@@ -1,0 +1,52 @@
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.title {
+    margin: 0;
+    font-size: 18px;
+}
+
+.count {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.scroll {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.table th,
+.table td {
+    padding: 10px 20px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.table th {
+    background: #fafbfc;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.table tbody tr+tr td {
+    border-top: 1px solid var(--border);
+}
