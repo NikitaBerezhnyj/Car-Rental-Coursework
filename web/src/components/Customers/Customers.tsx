@@ -1,37 +1,23 @@
 "use client";
 
 import styles from "./Customers.module.css";
+import { deleteCustomer } from "@/actions/customerActions";
 import type { Column } from "@/components/DataTable/DataTable";
 import { DataTable } from "@/components/DataTable/DataTable";
+import { RowActions } from "@/components/RowActions/RowActions";
+import { useUrlFilters } from "@/hooks/useUrlFilters";
 import type { Customer } from "@/types/customer";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 type CustomersProps = {
   customers: Customer[];
+  search: string;
 };
 
-export function Customers({ customers }: CustomersProps) {
-  const [search, setSearch] = useState("");
-
-  const filteredCustomers = useMemo(() => {
-    const normalizedSearch = search.trim().toLowerCase();
-
-    if (!normalizedSearch) {
-      return customers;
-    }
-
-    return customers.filter(customer => {
-      const fullName = `${customer.firstName} ${customer.lastName}`.toLowerCase();
-
-      return (
-        fullName.includes(normalizedSearch) ||
-        customer.firstName.toLowerCase().includes(normalizedSearch) ||
-        customer.lastName.toLowerCase().includes(normalizedSearch) ||
-        customer.phone.toLowerCase().includes(normalizedSearch)
-      );
-    });
-  }, [customers, search]);
+export function Customers({ customers, search }: CustomersProps) {
+  const { updateDebounced } = useUrlFilters();
+  const [searchText, setSearchText] = useState(search);
 
   const columns: Column<Customer>[] = [
     {
@@ -52,7 +38,13 @@ export function Customers({ customers }: CustomersProps) {
     },
     {
       header: "Дії",
-      render: () => <span className={styles.placeholder}>—</span>
+      render: customer => (
+        <RowActions
+          id={customer.id}
+          editHref={`/customers/${customer.id}/edit`}
+          deleteAction={deleteCustomer}
+        />
+      )
     }
   ];
 
@@ -72,8 +64,11 @@ export function Customers({ customers }: CustomersProps) {
       <div className={styles.toolbar}>
         <input
           type="search"
-          value={search}
-          onChange={event => setSearch(event.target.value)}
+          value={searchText}
+          onChange={event => {
+            setSearchText(event.target.value);
+            updateDebounced({ search: event.target.value.trim() });
+          }}
           placeholder="Пошук за ПІБ або телефоном..."
           className={`form-control ${styles.searchControl}`}
         />
@@ -81,7 +76,7 @@ export function Customers({ customers }: CustomersProps) {
 
       <DataTable
         title="Список клієнтів"
-        rows={filteredCustomers}
+        rows={customers}
         columns={columns}
         emptyMessage={search ? "За вашим запитом клієнтів не знайдено" : "Клієнтів поки немає"}
       />

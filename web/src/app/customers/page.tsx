@@ -1,18 +1,25 @@
 import { Customers } from "@/components/Customers/Customers";
 import { LoadingState } from "@/components/LoadingState/LoadingState";
 import { customerService } from "@/container";
+import { parseSearchFilters } from "@/schemas/filterSchemas";
+import type { SearchParams } from "@/types/filters";
 import { Suspense } from "react";
 
-async function CustomersContent() {
-  const customers = await customerService.list();
+type PageProps = {
+  searchParams: Promise<SearchParams>;
+};
 
-  return <Customers customers={customers} />;
+async function CustomersContent({ searchParams }: PageProps) {
+  const filters = parseSearchFilters(await searchParams);
+  const customers = await customerService.list(filters);
+
+  return <Customers customers={customers} search={filters.search ?? ""} />;
 }
 
-export default function CustomersPage() {
+export default function CustomersPage({ searchParams }: PageProps) {
   return (
     <Suspense fallback={<LoadingState message="Завантаження клієнтів..." />}>
-      <CustomersContent />
+      <CustomersContent searchParams={searchParams} />
     </Suspense>
   );
 }
