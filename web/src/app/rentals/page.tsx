@@ -1,5 +1,5 @@
-import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import Rentals from "@/components/screens/Rentals/Rentals";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { rentalService } from "@/container";
 import { parseRentalFilters } from "@/schemas/filterSchemas";
 import type { SearchParams } from "@/types/filters";

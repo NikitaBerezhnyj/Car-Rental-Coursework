@@ -1,8 +1,8 @@
 import type { IEmployeeRepository } from "./interfaces/IEmployeeRepository";
 import { query } from "@/lib/db";
-import { toLikePattern } from "@/utils/sql";
 import type { Employee, EmployeeInput, EmployeePosition } from "@/types/employee";
 import { SearchFilters } from "@/types/filters";
+import { toLikePattern } from "@/utils/sql";
 
 type EmployeeRow = {
   employee_id: number;

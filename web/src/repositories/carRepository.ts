@@ -1,8 +1,8 @@
 import { query } from "@/lib/db";
-import { toLikePattern } from "@/utils/sql";
 import type { ICarRepository } from "@/repositories/interfaces/ICarRepository";
 import type { Car, CarInput, CarStatus } from "@/types/car";
 import { CarFilters } from "@/types/filters";
+import { toLikePattern } from "@/utils/sql";
 
 type CarRow = {
   car_id: number;

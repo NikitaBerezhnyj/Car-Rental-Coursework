@@ -1,6 +1,6 @@
 import { createRental } from "@/actions/rentalActions";
-import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { NewRental } from "@/components/forms/NewRental/NewRental";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { carService, customerService, employeeService, extraService } from "@/container";
 import { addDays, getToday, toIsoDate } from "@/utils/date";
 import { connection } from "next/server";

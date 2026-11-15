@@ -1,8 +1,8 @@
 import { query } from "@/lib/db";
-import { toLikePattern } from "@/utils/sql";
 import type { ICustomerRepository } from "@/repositories/interfaces/ICustomerRepository";
 import type { Customer, CustomerInput } from "@/types/customer";
 import { SearchFilters } from "@/types/filters";
+import { toLikePattern } from "@/utils/sql";
 
 type CustomerRow = {
   customer_id: number;

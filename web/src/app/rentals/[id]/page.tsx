@@ -1,5 +1,5 @@
-import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { RentalDetails } from "@/components/screens/RentalDetails/RentalDetails";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { rentalService } from "@/container";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
