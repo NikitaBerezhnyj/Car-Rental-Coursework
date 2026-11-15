@@ -1,13 +1,27 @@
 "use client";
 
-import { StatusBadge } from "../StatusBadge/StatusBadge";
+import { RowActions } from "../RowActions/RowActions";
+import { StatusBadge, StatusBadgeVariant } from "../StatusBadge/StatusBadge";
 import styles from "./Maintenance.module.css";
+import { deleteMaintenance } from "@/actions/maintenanceActions";
 import type { Column } from "@/components/DataTable/DataTable";
 import { DataTable } from "@/components/DataTable/DataTable";
-import type { Maintenance as MaintenanceRecord } from "@/types/maintenance";
+import type { Maintenance as MaintenanceRecord, MaintenanceStatus } from "@/types/maintenance";
 import { formatCurrency } from "@/utils/currency";
 import { formatDate } from "@/utils/date";
 import Link from "next/link";
+
+const STATUS_LABELS: Record<MaintenanceStatus, string> = {
+  planned: "Заплановано",
+  ongoing: "Триває",
+  completed: "Завершено"
+};
+
+const STATUS_VARIANTS: Record<MaintenanceStatus, StatusBadgeVariant> = {
+  planned: "info",
+  ongoing: "warning",
+  completed: "success"
+};
 
 type MaintenanceProps = {
   records: MaintenanceRecord[];
@@ -40,8 +54,18 @@ export function Maintenance({ records }: MaintenanceProps) {
       header: "Статус",
       render: record => (
         <StatusBadge
-          label={record.endDate ? "Завершено" : "Триває"}
-          variant={record.endDate ? "success" : "warning"}
+          label={STATUS_LABELS[record.status]}
+          variant={STATUS_VARIANTS[record.status]}
+        />
+      )
+    },
+    {
+      header: "Дії",
+      render: record => (
+        <RowActions
+          id={record.id}
+          editHref={`/maintenance/${record.id}/edit`}
+          deleteAction={deleteMaintenance}
         />
       )
     }
