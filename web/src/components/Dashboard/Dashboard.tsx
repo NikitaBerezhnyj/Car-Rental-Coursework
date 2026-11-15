@@ -1,3 +1,5 @@
+"use client";
+
 import { StatCard } from "../StatCard/StatCard";
 import { StatusBadge } from "../StatusBadge/StatusBadge";
 import styles from "./Dashboard.module.css";
@@ -6,6 +8,7 @@ import type { Car } from "@/types/car";
 import type { Rental } from "@/types/rental";
 import { formatDate, getToday, parseDate } from "@/utils/date";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function isActiveRental(rental: Rental): boolean {
   return rental.status === "active";
@@ -24,6 +27,8 @@ export default function Dashboard({ cars, rentals }: { cars: Car[]; rentals: Ren
   const overdueRentals = activeRentals.filter(isOverdue);
 
   const availableCars = cars.filter(isAvailableCar);
+
+  const router = useRouter();
 
   const attentionRentals = [...activeRentals]
     .sort((a, b) => {
@@ -100,6 +105,7 @@ export default function Dashboard({ cars, rentals }: { cars: Car[]; rentals: Ren
               }
             ]}
             emptyMessage="Немає активних оренд"
+            onRowClick={rental => router.push(`/rentals/${rental.id}`)}
           />
         </div>
 
