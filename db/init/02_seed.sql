@@ -22,7 +22,7 @@ INSERT INTO employees (first_name, last_name, position, phone) VALUES
 INSERT INTO cars (category_id, brand, model, plate_number, year, status) VALUES
     (1, 'Toyota',      'Corolla',   'AA1234BB', 2021, 'available'),
     (1, 'Skoda',       'Fabia',     'AA2345BC', 2020, 'available'),
-    (1, 'Renault',     'Logan',     'AA3456BE', 2019, 'maintenance'),
+    (1, 'Renault',     'Logan',     'AA3456BE', 2019, 'available'),
     (2, 'Volkswagen',  'Passat',    'AA4567BH', 2022, 'available'),
     (2, 'Skoda',       'Octavia',   'AA5678BK', 2021, 'available'),
     (2, 'Hyundai',     'Elantra',   'AA6789BM', 2022, 'available'),
@@ -61,9 +61,9 @@ INSERT INTO rental_services (rental_id, service_id, price) VALUES
     (9, 3, 200);
 
 INSERT INTO payments (rental_id, amount, method, paid_at) VALUES
-    (1,  4000,  'card', '2026-10-01 10:15'),
+    (1,  4750,  'card', '2026-10-01 10:15'),
     (2,  6000,  'cash', '2026-10-10 12:40'),
-    (3,  14400, 'card', '2026-10-15 09:30'),
+    (3,  17200, 'card', '2026-10-15 09:30'),
     (4,  18000, 'card', '2026-10-20 14:05'),
     (5,  2000,  'cash', '2026-11-05 11:20'),
     (6,  3000,  'card', '2026-11-10 16:00'),
