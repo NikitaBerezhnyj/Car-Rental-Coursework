@@ -6,3 +6,5 @@ export type Customer = {
   email: string | null;
   driverLicense: string;
 };
+
+export type CustomerInput = Omit<Customer, "id">;

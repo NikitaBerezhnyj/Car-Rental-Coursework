@@ -3,3 +3,5 @@ export type CarCategory = {
   name: string;
   dailyRate: number;
 };
+
+export type CarCategoryInput = Omit<CarCategory, "id">;
