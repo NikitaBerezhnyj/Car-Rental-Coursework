@@ -2,6 +2,7 @@
 
 import styles from "./Sidebar.module.css";
 import {
+  BarChart3,
   CalendarDays,
   CarFront,
   ChevronLeft,
@@ -12,7 +13,8 @@ import {
   Tags,
   UserCog,
   Users,
-  Wrench} from "lucide-react";
+  Wrench
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -47,6 +49,10 @@ const navigation = [
       { label: "Категорії", href: "/settings/categories", icon: Tags },
       { label: "Працівники", href: "/settings/employees", icon: UserCog }
     ]
+  },
+  {
+    title: "Аналітика",
+    items: [{ label: "Звіти", href: "/reports", icon: BarChart3 }]
   }
 ];
 
