@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
+import { AppProviders } from "@/providers/AppProviders";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { type ReactNode, Suspense } from "react";
@@ -23,12 +24,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="uk" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
-        <div className="app-layout">
-          <Suspense fallback={null}>
-            <Sidebar />
-          </Suspense>
-          <div className="app-content">{children}</div>
-        </div>
+        <AppProviders>
+          <div className="app-layout">
+            <Suspense fallback={null}>
+              <Sidebar />
+            </Suspense>
+            <div className="app-content">{children}</div>
+          </div>
+        </AppProviders>
       </body>
     </html>
   );

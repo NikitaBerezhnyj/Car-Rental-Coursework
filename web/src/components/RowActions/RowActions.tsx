@@ -1,6 +1,7 @@
 "use client";
 
 import styles from "./RowActions.module.css";
+import { useConfirm } from "@/context/ConfirmContext";
 import type { FormState } from "@/types/formState";
 import { SquarePen, Trash } from "lucide-react";
 import Link from "next/link";
@@ -14,13 +15,21 @@ type RowActionsProps = {
 
 export function RowActions({ id, editHref, deleteAction }: RowActionsProps) {
   const [pending, startTransition] = useTransition();
+  const { showConfirm, showAlert } = useConfirm();
 
-  function handleDelete() {
-    if (!confirm("Видалити запис?")) return;
+  async function handleDelete() {
+    const confirmed = await showConfirm({
+      title: "Видалення запису",
+      message: "Видалити запис?",
+      confirmText: "Видалити",
+      danger: true
+    });
+
+    if (!confirmed) return;
 
     startTransition(async () => {
       const { error } = await deleteAction(id);
-      if (error) alert(error);
+      if (error) await showAlert(error);
     });
   }
 

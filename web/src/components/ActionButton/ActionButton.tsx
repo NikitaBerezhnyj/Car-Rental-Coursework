@@ -1,5 +1,6 @@
 "use client";
 
+import { useConfirm } from "@/context/ConfirmContext";
 import type { FormState } from "@/types/formState";
 import { useTransition } from "react";
 
@@ -21,13 +22,14 @@ export function ActionButton({
   disabled = false
 }: ActionButtonProps) {
   const [pending, startTransition] = useTransition();
+  const { showConfirm, showAlert } = useConfirm();
 
-  function handleClick() {
-    if (confirmMessage && !confirm(confirmMessage)) return;
+  async function handleClick() {
+    if (confirmMessage && !(await showConfirm(confirmMessage))) return;
 
     startTransition(async () => {
       const { error } = await action(id);
-      if (error) alert(error);
+      if (error) await showAlert(error);
     });
   }
 
