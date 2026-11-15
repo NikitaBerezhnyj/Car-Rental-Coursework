@@ -1,5 +1,5 @@
 import { idField, moneyField } from "./fields";
-import { PAYMENT_METHODS } from "@/types/payment";
+import { PAYMENT_METHODS } from "@/constants/payment";
 import { z } from "zod";
 
 export const paymentSchema = z.object({

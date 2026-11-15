@@ -1,4 +1,4 @@
-export const EMPLOYEE_POSITIONS = ["Менеджер", "Адміністратор", "Механік", "Директор"] as const;
+import { EMPLOYEE_POSITIONS } from "@/constants/employee";
 
 export type EmployeePosition = (typeof EMPLOYEE_POSITIONS)[number];
 

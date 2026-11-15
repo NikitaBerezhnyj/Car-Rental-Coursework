@@ -2,8 +2,8 @@
 
 import { FormField } from "@/components/ui/FormField/FormField";
 import { FormPage } from "@/components/ui/FormPage/FormPage";
+import { PAYMENT_METHOD_LABELS, PAYMENT_METHODS } from "@/constants/payment";
 import type { FormState } from "@/types/formState";
-import { PAYMENT_METHOD_LABELS, PAYMENT_METHODS } from "@/types/payment";
 import type { Rental } from "@/types/rental";
 import { formatCurrency } from "@/utils/currency";
 import { useActionState } from "react";

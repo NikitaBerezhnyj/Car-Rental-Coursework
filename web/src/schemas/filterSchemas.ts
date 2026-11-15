@@ -1,7 +1,7 @@
 import { isValidDate } from "./fields";
-import { CAR_STATUSES } from "@/types/car";
+import { CAR_STATUSES } from "@/constants/car";
+import { RENTAL_STATUSES } from "@/constants/rental";
 import type { CarFilters, RentalFilters, SearchFilters } from "@/types/filters";
-import { RENTAL_STATUSES } from "@/types/rental";
 import { z } from "zod";
 
 const searchField = z

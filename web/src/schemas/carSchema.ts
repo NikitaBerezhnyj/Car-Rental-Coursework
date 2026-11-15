@@ -1,5 +1,5 @@
 import { idField, textField } from "./fields";
-import { STORED_CAR_STATUSES } from "@/types/car";
+import { STORED_CAR_STATUSES } from "@/constants/car";
 import { z } from "zod";
 
 export const carSchema = z.object({

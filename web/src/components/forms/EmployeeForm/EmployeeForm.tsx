@@ -2,7 +2,8 @@
 
 import { FormField } from "@/components/ui/FormField/FormField";
 import { FormPage } from "@/components/ui/FormPage/FormPage";
-import { type Employee, EMPLOYEE_POSITIONS } from "@/types/employee";
+import { EMPLOYEE_POSITIONS } from "@/constants/employee";
+import type { Employee } from "@/types/employee";
 import type { FormState } from "@/types/formState";
 import { useActionState } from "react";
 

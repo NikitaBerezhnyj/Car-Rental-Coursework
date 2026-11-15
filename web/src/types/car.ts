@@ -1,7 +1,6 @@
-export const CAR_STATUSES = ["available", "rented", "maintenance", "retired"] as const;
-export type CarStatus = (typeof CAR_STATUSES)[number];
+import type { CAR_STATUSES, STORED_CAR_STATUSES } from "@/constants/car";
 
-export const STORED_CAR_STATUSES = ["available", "retired"] as const;
+export type CarStatus = (typeof CAR_STATUSES)[number];
 export type StoredCarStatus = (typeof STORED_CAR_STATUSES)[number];
 
 export type Car = {

@@ -1,5 +1,5 @@
 import { phoneField, textField } from "./fields";
-import { EMPLOYEE_POSITIONS } from "@/types/employee";
+import { EMPLOYEE_POSITIONS } from "@/constants/employee";
 import { z } from "zod";
 
 export const employeeSchema = z.object({
