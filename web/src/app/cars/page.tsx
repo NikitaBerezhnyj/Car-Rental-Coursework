@@ -1,18 +1,29 @@
 import { Cars } from "@/components/Cars/Cars";
 import { LoadingState } from "@/components/LoadingState/LoadingState";
-import { carService } from "@/container";
+import { carCategoryService, carService } from "@/container";
+import { parseCarFilters } from "@/schemas/filterSchemas";
+import type { SearchParams } from "@/types/filters";
 import { Suspense } from "react";
 
-async function CarsContent() {
-  const cars = await carService.list();
+type PageProps = {
+  searchParams: Promise<SearchParams>;
+};
 
-  return <Cars cars={cars} />;
+async function CarsContent({ searchParams }: PageProps) {
+  const filters = parseCarFilters(await searchParams);
+
+  const [cars, categories] = await Promise.all([
+    carService.list(filters),
+    carCategoryService.list()
+  ]);
+
+  return <Cars cars={cars} categories={categories} filters={filters} />;
 }
 
-export default function CarsPage() {
+export default function CarsPage({ searchParams }: PageProps) {
   return (
     <Suspense fallback={<LoadingState message="Завантаження автомобілів..." />}>
-      <CarsContent />
+      <CarsContent searchParams={searchParams} />
     </Suspense>
   );
 }

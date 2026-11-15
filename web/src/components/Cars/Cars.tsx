@@ -2,48 +2,46 @@
 
 import { StatusBadge, type StatusBadgeVariant } from "../StatusBadge/StatusBadge";
 import styles from "./Cars.module.css";
+import { deleteCar } from "@/actions/carActions";
 import { type Column, DataTable } from "@/components/DataTable/DataTable";
+import { RowActions } from "@/components/RowActions/RowActions";
+import { useUrlFilters } from "@/hooks/useUrlFilters";
 import type { Car, CarStatus } from "@/types/car";
+import type { CarCategory } from "@/types/carCategory";
+import type { CarFilters } from "@/types/filters";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 const STATUS_LABELS: Record<CarStatus, string> = {
   available: "Доступний",
+  rented: "В оренді",
   maintenance: "На обслуговуванні",
   retired: "Списаний"
 };
 
 const STATUS_VARIANTS: Record<CarStatus, StatusBadgeVariant> = {
   available: "success",
+  rented: "info",
   maintenance: "warning",
   retired: "neutral"
 };
 
-type CarStatusFilter = "ALL" | CarStatus;
+type CarsProps = {
+  cars: Car[];
+  categories: CarCategory[];
+  filters: CarFilters;
+};
 
-export function Cars({ cars }: { cars: Car[] }) {
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<CarStatusFilter>("ALL");
-  const [categoryFilter, setCategoryFilter] = useState("ALL");
+export function Cars({ cars, categories, filters }: CarsProps) {
+  const { update, updateDebounced } = useUrlFilters();
 
-  const categories = useMemo(() => [...new Set(cars.map(car => car.categoryName))].sort(), [cars]);
+  const [search, setSearch] = useState<string>(filters.search ?? "");
+  const [status, setStatus] = useState<string>(filters.status ?? "");
+  const [categoryId, setCategoryId] = useState<string>(
+    filters.categoryId ? String(filters.categoryId) : ""
+  );
 
-  const filteredCars = useMemo(() => {
-    const normalizedSearch = search.trim().toLowerCase();
-
-    return cars.filter(car => {
-      const matchesSearch =
-        !normalizedSearch ||
-        `${car.brand} ${car.model}`.toLowerCase().includes(normalizedSearch) ||
-        car.plateNumber.toLowerCase().includes(normalizedSearch);
-
-      const matchesStatus = statusFilter === "ALL" || car.status === statusFilter;
-
-      const matchesCategory = categoryFilter === "ALL" || car.categoryName === categoryFilter;
-
-      return matchesSearch && matchesStatus && matchesCategory;
-    });
-  }, [cars, search, statusFilter, categoryFilter]);
+  const hasFilters = search !== "" || status !== "" || categoryId !== "";
 
   const columns: Column<Car>[] = [
     {
@@ -71,16 +69,14 @@ export function Cars({ cars }: { cars: Car[] }) {
       render: car => (
         <StatusBadge label={STATUS_LABELS[car.status]} variant={STATUS_VARIANTS[car.status]} />
       )
+    },
+    {
+      header: "Дії",
+      render: car => (
+        <RowActions id={car.id} editHref={`/cars/${car.id}/edit`} deleteAction={deleteCar} />
+      )
     }
   ];
-
-  const hasFilters = search !== "" || statusFilter !== "ALL" || categoryFilter !== "ALL";
-
-  function resetFilters() {
-    setSearch("");
-    setStatusFilter("ALL");
-    setCategoryFilter("ALL");
-  }
 
   return (
     <main className="page-container">
@@ -102,7 +98,10 @@ export function Cars({ cars }: { cars: Car[] }) {
           className={`form-control ${styles.searchControl}`}
           placeholder="Пошук за маркою, моделлю або номером..."
           value={search}
-          onChange={event => setSearch(event.target.value)}
+          onChange={event => {
+            setSearch(event.target.value);
+            updateDebounced({ search: event.target.value.trim() });
+          }}
         />
 
         <div className={styles.filterGroup}>
@@ -111,11 +110,15 @@ export function Cars({ cars }: { cars: Car[] }) {
           <select
             id="car-status"
             className={`form-control ${styles.selectControl}`}
-            value={statusFilter}
-            onChange={event => setStatusFilter(event.target.value as CarStatusFilter)}
+            value={status}
+            onChange={event => {
+              setStatus(event.target.value);
+              update({ status: event.target.value });
+            }}
           >
-            <option value="ALL">Усі</option>
+            <option value="">Усі</option>
             <option value="available">Доступний</option>
+            <option value="rented">В оренді</option>
             <option value="maintenance">На обслуговуванні</option>
             <option value="retired">Списаний</option>
           </select>
@@ -127,29 +130,26 @@ export function Cars({ cars }: { cars: Car[] }) {
           <select
             id="car-category"
             className={`form-control ${styles.selectControl}`}
-            value={categoryFilter}
-            onChange={event => setCategoryFilter(event.target.value)}
+            value={categoryId}
+            onChange={event => {
+              setCategoryId(event.target.value);
+              update({ categoryId: event.target.value });
+            }}
           >
-            <option value="ALL">Усі</option>
+            <option value="">Усі</option>
 
             {categories.map(category => (
-              <option key={category} value={category}>
-                {category}
+              <option key={category.id} value={category.id}>
+                {category.name}
               </option>
             ))}
           </select>
         </div>
-
-        {hasFilters && (
-          <button type="button" className="button-reset" onClick={resetFilters}>
-            Скинути
-          </button>
-        )}
       </section>
 
       <DataTable
         title="Список автомобілів"
-        rows={filteredCars}
+        rows={cars}
         columns={columns}
         emptyMessage={
           hasFilters
