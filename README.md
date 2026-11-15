@@ -59,7 +59,7 @@ docker compose --env-file .env.prod -f docker-compose.prod.yaml up --build
 When the corresponding services are running, they are available at:
 
 - Web application: [http://localhost:3000](http://localhost:3000)
-- PostgreSQL: [localhost:5432](localhost:5432)
+- PostgreSQL: [http://localhost:5432](http://localhost:5432)
 - pgAdmin: [http://localhost:5050](http://localhost:5050)
 
 ## Database
