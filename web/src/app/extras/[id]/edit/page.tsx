@@ -1,6 +1,6 @@
 import { updateExtra } from "@/actions/extraActions";
-import { ExtraForm } from "@/components/ExtraForm/ExtraForm";
-import { LoadingState } from "@/components/LoadingState/LoadingState";
+import { ExtraForm } from "@/components/forms/ExtraForm/ExtraForm";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { extraService } from "@/container";
 import { parseId } from "@/utils/id";
 import { notFound } from "next/navigation";

@@ -1,6 +1,6 @@
 import { createCar } from "@/actions/carActions";
-import { CarForm } from "@/components/CarForm/CarForm";
-import { LoadingState } from "@/components/LoadingState/LoadingState";
+import { CarForm } from "@/components/forms/CarForm/CarForm";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { carCategoryService } from "@/container";
 import { Suspense } from "react";
 

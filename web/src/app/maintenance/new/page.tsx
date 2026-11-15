@@ -1,6 +1,6 @@
 import { createMaintenance } from "@/actions/maintenanceActions";
-import { LoadingState } from "@/components/LoadingState/LoadingState";
-import { MaintenanceForm } from "@/components/MaintenanceForm/MaintenanceForm";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
+import { MaintenanceForm } from "@/components/forms/MaintenanceForm/MaintenanceForm";
 import { carService } from "@/container";
 import { Suspense } from "react";
 

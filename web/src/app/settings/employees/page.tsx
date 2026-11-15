@@ -1,5 +1,5 @@
-import { Employees } from "@/components/Employees/Employees";
-import { LoadingState } from "@/components/LoadingState/LoadingState";
+import { Employees } from "@/components/screens/Employees/Employees";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { employeeService } from "@/container";
 import { parseSearchFilters } from "@/schemas/filterSchemas";
 import type { SearchParams } from "@/types/filters";

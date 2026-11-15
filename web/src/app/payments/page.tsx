@@ -1,5 +1,5 @@
-import { LoadingState } from "@/components/LoadingState/LoadingState";
-import { Payments } from "@/components/Payments/Payments";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
+import { Payments } from "@/components/screens/Payments/Payments";
 import { paymentService } from "@/container";
 import { parseSearchFilters } from "@/schemas/filterSchemas";
 import type { SearchParams } from "@/types/filters";

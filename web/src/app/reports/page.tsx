@@ -1,5 +1,5 @@
-import { LoadingState } from "@/components/LoadingState/LoadingState";
-import { Reports } from "@/components/Reports/Reports";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
+import { Reports } from "@/components/screens/Reports/Reports";
 import { reportService } from "@/container";
 import { Suspense } from "react";
 

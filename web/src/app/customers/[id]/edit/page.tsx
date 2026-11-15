@@ -1,6 +1,6 @@
 import { updateCustomer } from "@/actions/customerActions";
-import { CustomerForm } from "@/components/CustomerForm/CustomerForm";
-import { LoadingState } from "@/components/LoadingState/LoadingState";
+import { CustomerForm } from "@/components/forms/CustomerForm/CustomerForm";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { customerService } from "@/container";
 import { parseId } from "@/utils/id";
 import { notFound } from "next/navigation";

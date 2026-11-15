@@ -1,5 +1,5 @@
-import { CarCategories } from "@/components/CarCategories/CarCategories";
-import { LoadingState } from "@/components/LoadingState/LoadingState";
+import { CarCategories } from "@/components/screens/CarCategories/CarCategories";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { carCategoryService } from "@/container";
 import { Suspense } from "react";
 

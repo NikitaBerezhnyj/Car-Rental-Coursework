@@ -1,5 +1,5 @@
-import { Customers } from "@/components/Customers/Customers";
-import { LoadingState } from "@/components/LoadingState/LoadingState";
+import { Customers } from "@/components/screens/Customers/Customers";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { customerService } from "@/container";
 import { parseSearchFilters } from "@/schemas/filterSchemas";
 import type { SearchParams } from "@/types/filters";

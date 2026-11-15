@@ -1,6 +1,6 @@
 import { createPayment } from "@/actions/paymentActions";
-import { LoadingState } from "@/components/LoadingState/LoadingState";
-import { PaymentForm } from "@/components/PaymentForm/PaymentForm";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
+import { PaymentForm } from "@/components/forms/PaymentForm/PaymentForm";
 import { rentalService } from "@/container";
 import { parseId } from "@/utils/id";
 import { notFound } from "next/navigation";

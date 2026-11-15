@@ -1,5 +1,5 @@
-import { Extras } from "@/components/Extras/Extras";
-import { LoadingState } from "@/components/LoadingState/LoadingState";
+import { Extras } from "@/components/screens/Extras/Extras";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { extraService } from "@/container";
 import { Suspense } from "react";
 

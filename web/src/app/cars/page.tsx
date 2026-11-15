@@ -1,5 +1,5 @@
-import { Cars } from "@/components/Cars/Cars";
-import { LoadingState } from "@/components/LoadingState/LoadingState";
+import { Cars } from "@/components/screens/Cars/Cars";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { carCategoryService, carService } from "@/container";
 import { parseCarFilters } from "@/schemas/filterSchemas";
 import type { SearchParams } from "@/types/filters";

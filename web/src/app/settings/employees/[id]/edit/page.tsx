@@ -1,6 +1,6 @@
 import { updateEmployee } from "@/actions/employeeActions";
-import { EmployeeForm } from "@/components/EmployeeForm/EmployeeForm";
-import { LoadingState } from "@/components/LoadingState/LoadingState";
+import { EmployeeForm } from "@/components/forms/EmployeeForm/EmployeeForm";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { employeeService } from "@/container";
 import { parseId } from "@/utils/id";
 import { notFound } from "next/navigation";

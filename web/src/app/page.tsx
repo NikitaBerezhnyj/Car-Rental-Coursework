@@ -1,5 +1,5 @@
-import Dashboard from "@/components/Dashboard/Dashboard";
-import { LoadingState } from "@/components/LoadingState/LoadingState";
+import Dashboard from "@/components/screens/Dashboard/Dashboard";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { dashboardService } from "@/container";
 import { Suspense } from "react";
 

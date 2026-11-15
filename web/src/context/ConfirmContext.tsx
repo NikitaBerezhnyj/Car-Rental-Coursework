@@ -1,6 +1,6 @@
 "use client";
 
-import { ConfirmDialog } from "@/components/ConfirmDialog/ConfirmDialog";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog/ConfirmDialog";
 import { createContext, useCallback, useContext, useRef, useState } from "react";
 
 type ConfirmOptions = {

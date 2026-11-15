@@ -1,6 +1,6 @@
 import { updateCarCategory } from "@/actions/carCategoryActions";
-import { CarCategoryForm } from "@/components/CarCategoryForm/CarCategoryForm";
-import { LoadingState } from "@/components/LoadingState/LoadingState";
+import { CarCategoryForm } from "@/components/forms/CarCategoryForm/CarCategoryForm";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { carCategoryService } from "@/container";
 import { parseId } from "@/utils/id";
 import { notFound } from "next/navigation";

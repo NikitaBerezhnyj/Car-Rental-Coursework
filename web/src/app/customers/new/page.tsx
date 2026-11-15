@@ -1,6 +1,6 @@
 import { createCustomer } from "@/actions/customerActions";
-import { CustomerForm } from "@/components/CustomerForm/CustomerForm";
-import { LoadingState } from "@/components/LoadingState/LoadingState";
+import { CustomerForm } from "@/components/forms/CustomerForm/CustomerForm";
+import { LoadingState } from "@/components/ui/LoadingState/LoadingState";
 import { getSafeReturnPath } from "@/utils/returnTo";
 import { Suspense } from "react";
 
