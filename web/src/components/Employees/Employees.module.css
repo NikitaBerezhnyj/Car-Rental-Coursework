@@ -20,10 +20,6 @@
     font-weight: 500;
 }
 
-.placeholder {
-    color: var(--text-disabled);
-}
-
 @media (max-width: 640px) {
     .header {
         align-items: flex-start;

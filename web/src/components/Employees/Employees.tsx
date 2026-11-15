@@ -1,38 +1,23 @@
 "use client";
 
 import styles from "./Employees.module.css";
+import { deleteEmployee } from "@/actions/employeeActions";
 import type { Column } from "@/components/DataTable/DataTable";
 import { DataTable } from "@/components/DataTable/DataTable";
+import { RowActions } from "@/components/RowActions/RowActions";
+import { useUrlFilters } from "@/hooks/useUrlFilters";
 import type { Employee } from "@/types/employee";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 type EmployeesProps = {
   employees: Employee[];
+  search: string;
 };
 
-export function Employees({ employees }: EmployeesProps) {
-  const [search, setSearch] = useState("");
-
-  const filteredEmployees = useMemo(() => {
-    const normalizedSearch = search.trim().toLowerCase();
-
-    if (!normalizedSearch) {
-      return employees;
-    }
-
-    return employees.filter(employee => {
-      const fullName = `${employee.lastName} ${employee.firstName}`.toLowerCase();
-
-      return (
-        fullName.includes(normalizedSearch) ||
-        employee.firstName.toLowerCase().includes(normalizedSearch) ||
-        employee.lastName.toLowerCase().includes(normalizedSearch) ||
-        employee.position.toLowerCase().includes(normalizedSearch) ||
-        employee.phone.toLowerCase().includes(normalizedSearch)
-      );
-    });
-  }, [employees, search]);
+export function Employees({ employees, search }: EmployeesProps) {
+  const { updateDebounced } = useUrlFilters();
+  const [searchText, setSearchText] = useState(search);
 
   const columns: Column<Employee>[] = [
     {
@@ -53,7 +38,13 @@ export function Employees({ employees }: EmployeesProps) {
     },
     {
       header: "Дії",
-      render: () => <span className={styles.placeholder}>—</span>
+      render: employee => (
+        <RowActions
+          id={employee.id}
+          editHref={`/settings/employees/${employee.id}/edit`}
+          deleteAction={deleteEmployee}
+        />
+      )
     }
   ];
 
@@ -73,8 +64,11 @@ export function Employees({ employees }: EmployeesProps) {
       <div className={styles.toolbar}>
         <input
           type="search"
-          value={search}
-          onChange={event => setSearch(event.target.value)}
+          value={searchText}
+          onChange={event => {
+            setSearchText(event.target.value);
+            updateDebounced({ search: event.target.value.trim() });
+          }}
           placeholder="Пошук за ПІБ, посадою або телефоном..."
           className={`form-control ${styles.searchControl}`}
         />
@@ -82,7 +76,7 @@ export function Employees({ employees }: EmployeesProps) {
 
       <DataTable
         title="Список працівників"
-        rows={filteredEmployees}
+        rows={employees}
         columns={columns}
         emptyMessage={
           search ? "За вашим запитом працівників не знайдено" : "Працівників поки немає"
