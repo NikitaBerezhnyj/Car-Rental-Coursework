@@ -3,7 +3,6 @@
 import styles from "./RowActions.module.css";
 import { useConfirm } from "@/context/ConfirmContext";
 import type { FormState } from "@/types/formState";
-import { SquarePen, Trash } from "lucide-react";
 import Link from "next/link";
 import { useTransition } from "react";
 
@@ -37,14 +36,12 @@ export function RowActions({ id, editHref, deleteAction }: RowActionsProps) {
     <div className={styles.actions}>
       {editHref && (
         <Link href={editHref} className={styles.edit}>
-          {/* Редагувати */}
-          <SquarePen />
+          Редагувати
         </Link>
       )}
 
       <button type="button" className={styles.delete} disabled={pending} onClick={handleDelete}>
-        {/* Видалити */}
-        <Trash />
+        Видалити
       </button>
     </div>
   );
