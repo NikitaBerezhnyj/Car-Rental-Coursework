@@ -17,16 +17,6 @@ const toRentalExtra = (row: RentalExtraRow): RentalExtra => ({
 });
 
 export class RentalExtraRepository implements IRentalExtraRepository {
-  async findAll(): Promise<RentalExtra[]> {
-    const rows = await query<RentalExtraRow>(
-      `SELECT rs.rental_id, rs.service_id, s.name AS extra_name, rs.price
-       FROM rental_services rs
-       JOIN additional_services s USING (service_id)
-       ORDER BY rs.rental_id, rs.service_id`
-    );
-    return rows.map(toRentalExtra);
-  }
-
   async findByRentalId(rentalId: number): Promise<RentalExtra[]> {
     const rows = await query<RentalExtraRow>(
       `SELECT rs.rental_id, rs.service_id, s.name AS extra_name, rs.price
