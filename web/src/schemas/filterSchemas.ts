@@ -4,8 +4,6 @@ import type { CarFilters, RentalFilters, SearchFilters } from "@/types/filters";
 import { RENTAL_STATUSES } from "@/types/rental";
 import { z } from "zod";
 
-// Фільтри приходять з адреси, тому некоректні значення ігноруємо (catch),
-// а не повертаємо помилку: parse ніколи не кидає виняток
 const searchField = z
   .string()
   .trim()

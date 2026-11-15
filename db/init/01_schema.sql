@@ -256,7 +256,6 @@ DECLARE
     rental_status  VARCHAR(15);
     rental_balance NUMERIC(10,2);
 BEGIN
-    -- Блокуємо оренду, щоб дві одночасні оплати разом не перевищили залишок
     PERFORM 1 FROM rentals WHERE rental_id = NEW.rental_id FOR UPDATE;
 
     SELECT r.status, s.balance

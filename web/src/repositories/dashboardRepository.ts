@@ -3,7 +3,6 @@ import { query } from "@/lib/db";
 import type { DashboardSummary, Debtor, OverdueRental, UpcomingRental } from "@/types/dashboard";
 
 export class DashboardRepository implements IDashboardRepository {
-  // Зведення: кілька скалярних підзапитів в одному SELECT
   async getSummary(): Promise<DashboardSummary> {
     const rows = await query<DashboardSummary>(
       `SELECT
@@ -23,7 +22,6 @@ export class DashboardRepository implements IDashboardRepository {
     return rows[0];
   }
 
-  // Прострочені повернення: арифметика з датами
   getOverdueRentals(): Promise<OverdueRental[]> {
     return query<OverdueRental>(
       `SELECT r.rental_id AS id,
@@ -39,7 +37,6 @@ export class DashboardRepository implements IDashboardRepository {
     );
   }
 
-  // Повернення, заплановані на найближчі 7 днів
   getUpcomingReturns(): Promise<UpcomingRental[]> {
     return query<UpcomingRental>(
       `SELECT r.rental_id AS id,
@@ -55,7 +52,6 @@ export class DashboardRepository implements IDashboardRepository {
     );
   }
 
-  // Видачі на найближчі 7 днів, разом із тими, що вже мали початися
   getUpcomingPickups(): Promise<UpcomingRental[]> {
     return query<UpcomingRental>(
       `SELECT r.rental_id AS id,
@@ -70,7 +66,6 @@ export class DashboardRepository implements IDashboardRepository {
     );
   }
 
-  // Найбільші борги: представлення rental_summary, групування за клієнтом, LIMIT
   getTopDebtors(): Promise<Debtor[]> {
     return query<Debtor>(
       `SELECT cu.customer_id AS id,

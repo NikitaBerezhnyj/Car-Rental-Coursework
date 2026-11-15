@@ -45,7 +45,7 @@ export function Reports({ reports }: { reports: ReportsData }) {
       />
 
       <DataTable
-        title="Постійні клієнти (від двох оренд)"
+        title="Постійні клієнти"
         rows={reports.frequentCustomers}
         columns={[
           { header: "Клієнт", render: row => row.customerName },

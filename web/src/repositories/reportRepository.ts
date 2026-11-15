@@ -3,7 +3,6 @@ import { query } from "@/lib/db";
 import type { CarProfit, CategoryStats, FrequentCustomer, MonthlyIncome } from "@/types/report";
 
 export class ReportRepository implements IReportRepository {
-  // Надходження оплат за місяцями: групування за датою
   getMonthlyIncome(): Promise<MonthlyIncome[]> {
     return query<MonthlyIncome>(
       `SELECT to_char(date_trunc('month', paid_at), 'YYYY-MM') AS id,
@@ -16,7 +15,6 @@ export class ReportRepository implements IReportRepository {
     );
   }
 
-  // Популярність категорій: LEFT JOIN, щоб категорії без оренд теж були у звіті
   getCategoryStats(): Promise<CategoryStats[]> {
     return query<CategoryStats>(
       `SELECT cat.category_id AS id,
@@ -32,7 +30,6 @@ export class ReportRepository implements IReportRepository {
     );
   }
 
-  // Постійні клієнти (від двох оренд): HAVING і COUNT(DISTINCT)
   getFrequentCustomers(): Promise<FrequentCustomer[]> {
     return query<FrequentCustomer>(
       `SELECT cu.customer_id AS id,
@@ -48,7 +45,6 @@ export class ReportRepository implements IReportRepository {
     );
   }
 
-  // Прибутковість автомобілів: виручка мінус витрати на обслуговування (підзапити у FROM)
   getCarProfits(): Promise<CarProfit[]> {
     return query<CarProfit>(
       `SELECT c.car_id AS id,

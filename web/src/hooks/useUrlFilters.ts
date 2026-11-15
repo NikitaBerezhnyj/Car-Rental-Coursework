@@ -5,7 +5,6 @@ import { useEffect, useRef } from "react";
 
 const SEARCH_DELAY_MS = 300;
 
-// Фільтри зберігаються в адресі сторінки: після зміни параметрів сервер знову виконує запит до БД
 export function useUrlFilters() {
   const router = useRouter();
   const pathname = usePathname();
@@ -23,7 +22,6 @@ export function useUrlFilters() {
     router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
   }
 
-  // Для текстового пошуку: чекаємо, поки користувач перестане вводити
   function updateDebounced(changes: Record<string, string>) {
     clearTimeout(timer.current);
     timer.current = setTimeout(() => update(changes), SEARCH_DELAY_MS);

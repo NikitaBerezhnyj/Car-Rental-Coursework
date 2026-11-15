@@ -9,18 +9,23 @@
         "btrim",
         "daterange",
         "dpage",
+        "Elantra",
+        "Fabia",
         "fkey",
         "geist",
         "healthcheck",
         "ILIKE",
         "isready",
         "nums",
+        "Passat",
         "pgadmin",
         "pgdata",
         "plpgsql",
         "postgres",
         "postgresql",
+        "Qashqai",
         "sonarjs",
+        "Sportage",
         "WATCHPACK"
     ]
 }

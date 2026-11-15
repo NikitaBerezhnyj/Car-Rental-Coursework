@@ -54,7 +54,6 @@ export function NewRental({
   const rentalCost = selectedCar ? days * selectedCar.dailyRate : 0;
   const extrasCost = days * selectedExtras.reduce((sum, extra) => sum + extra.dailyPrice, 0);
 
-  // Період зберігається в адресі: сервер повертає автомобілі, вільні на ці дати
   function changePeriod(nextStartDate: string, nextEndDate: string) {
     setStartDate(nextStartDate);
     setEndDate(nextEndDate);
