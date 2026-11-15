@@ -2,7 +2,7 @@ import styles from "./StatCard.module.css";
 
 type StatCardProps = {
   title: string;
-  value: number;
+  value: number | string;
   description?: string;
   variant?: "default" | "success" | "warning" | "danger";
 };

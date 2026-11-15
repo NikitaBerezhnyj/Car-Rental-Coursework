@@ -5,32 +5,13 @@ export class ReportService {
   constructor(private readonly reports: IReportRepository) {}
 
   async getAll(): Promise<ReportsData> {
-    const [
-      monthlyIncome,
-      categoryStats,
-      debtors,
-      overdueRentals,
-      frequentCustomers,
-      carProfits,
-      employeeStats
-    ] = await Promise.all([
+    const [monthlyIncome, categoryStats, frequentCustomers, carProfits] = await Promise.all([
       this.reports.getMonthlyIncome(),
       this.reports.getCategoryStats(),
-      this.reports.getDebtors(),
-      this.reports.getOverdueRentals(),
       this.reports.getFrequentCustomers(),
-      this.reports.getCarProfits(),
-      this.reports.getEmployeeStats()
+      this.reports.getCarProfits()
     ]);
 
-    return {
-      monthlyIncome,
-      categoryStats,
-      debtors,
-      overdueRentals,
-      frequentCustomers,
-      carProfits,
-      employeeStats
-    };
+    return { monthlyIncome, categoryStats, frequentCustomers, carProfits };
   }
 }

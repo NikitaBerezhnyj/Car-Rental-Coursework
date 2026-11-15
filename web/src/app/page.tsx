@@ -1,12 +1,12 @@
 import Dashboard from "@/components/Dashboard/Dashboard";
 import { LoadingState } from "@/components/LoadingState/LoadingState";
-import { carService, rentalService } from "@/container";
+import { dashboardService } from "@/container";
 import { Suspense } from "react";
 
 async function DashboardContent() {
-  const [cars, rentals] = await Promise.all([carService.list(), rentalService.list()]);
+  const data = await dashboardService.getOverview();
 
-  return <Dashboard cars={cars} rentals={rentals} />;
+  return <Dashboard data={data} />;
 }
 
 export default function HomePage() {

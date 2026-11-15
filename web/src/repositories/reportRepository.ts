@@ -1,17 +1,9 @@
 import type { IReportRepository } from "./interfaces/IReportRepository";
 import { query } from "@/lib/db";
-import type {
-  CarProfit,
-  CategoryStats,
-  Debtor,
-  EmployeeStats,
-  FrequentCustomer,
-  MonthlyIncome,
-  OverdueRental
-} from "@/types/report";
+import type { CarProfit, CategoryStats, FrequentCustomer, MonthlyIncome } from "@/types/report";
 
 export class ReportRepository implements IReportRepository {
-  // 1. Надходження оплат за місяцями: групування за датою
+  // Надходження оплат за місяцями: групування за датою
   getMonthlyIncome(): Promise<MonthlyIncome[]> {
     return query<MonthlyIncome>(
       `SELECT to_char(date_trunc('month', paid_at), 'YYYY-MM') AS id,
@@ -24,7 +16,7 @@ export class ReportRepository implements IReportRepository {
     );
   }
 
-  // 2. Популярність категорій: LEFT JOIN чотирьох таблиць, щоб категорії без оренд теж були у звіті
+  // Популярність категорій: LEFT JOIN, щоб категорії без оренд теж були у звіті
   getCategoryStats(): Promise<CategoryStats[]> {
     return query<CategoryStats>(
       `SELECT cat.category_id AS id,
@@ -40,40 +32,7 @@ export class ReportRepository implements IReportRepository {
     );
   }
 
-  // 3. Клієнти із заборгованістю: представлення rental_summary і агрегація боргу
-  getDebtors(): Promise<Debtor[]> {
-    return query<Debtor>(
-      `SELECT cu.customer_id AS id,
-              cu.last_name || ' ' || cu.first_name AS "customerName",
-              cu.phone,
-              COUNT(*)::int AS "rentalsCount",
-              SUM(s.balance)::float8 AS debt
-       FROM rental_summary s
-       JOIN rentals r USING (rental_id)
-       JOIN customers cu USING (customer_id)
-       WHERE r.status IN ('active', 'completed') AND s.balance > 0
-       GROUP BY cu.customer_id, cu.last_name, cu.first_name, cu.phone
-       ORDER BY debt DESC`
-    );
-  }
-
-  // 4. Прострочені оренди: арифметика з датами
-  getOverdueRentals(): Promise<OverdueRental[]> {
-    return query<OverdueRental>(
-      `SELECT r.rental_id AS id,
-              cu.last_name || ' ' || cu.first_name AS "customerName",
-              c.brand || ' ' || c.model AS "carName",
-              r.end_date::text AS "endDate",
-              (CURRENT_DATE - r.end_date)::int AS "daysOverdue"
-       FROM rentals r
-       JOIN customers cu USING (customer_id)
-       JOIN cars c USING (car_id)
-       WHERE r.status = 'active' AND r.end_date < CURRENT_DATE
-       ORDER BY "daysOverdue" DESC`
-    );
-  }
-
-  // 5. Постійні клієнти (від двох оренд): HAVING і COUNT(DISTINCT)
+  // Постійні клієнти (від двох оренд): HAVING і COUNT(DISTINCT)
   getFrequentCustomers(): Promise<FrequentCustomer[]> {
     return query<FrequentCustomer>(
       `SELECT cu.customer_id AS id,
@@ -89,7 +48,7 @@ export class ReportRepository implements IReportRepository {
     );
   }
 
-  // 6. Прибутковість автомобілів: виручка мінус витрати на обслуговування (підзапити у FROM)
+  // Прибутковість автомобілів: виручка мінус витрати на обслуговування (підзапити у FROM)
   getCarProfits(): Promise<CarProfit[]> {
     return query<CarProfit>(
       `SELECT c.car_id AS id,
@@ -113,22 +72,6 @@ export class ReportRepository implements IReportRepository {
            GROUP BY car_id
        ) mnt ON mnt.car_id = c.car_id
        ORDER BY profit DESC, "carName"`
-    );
-  }
-
-  // 7. Робота працівників: оформлені оренди та їх сума
-  getEmployeeStats(): Promise<EmployeeStats[]> {
-    return query<EmployeeStats>(
-      `SELECT e.employee_id AS id,
-              e.last_name || ' ' || e.first_name AS "employeeName",
-              e.position,
-              COUNT(r.rental_id)::int AS "rentalsCount",
-              COALESCE(SUM(s.total_cost), 0)::float8 AS revenue
-       FROM employees e
-       LEFT JOIN rentals r ON r.employee_id = e.employee_id AND r.status <> 'cancelled'
-       LEFT JOIN rental_summary s ON s.rental_id = r.rental_id
-       GROUP BY e.employee_id, e.last_name, e.first_name, e.position
-       ORDER BY revenue DESC`
     );
   }
 }

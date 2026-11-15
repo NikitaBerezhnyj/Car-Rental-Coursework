@@ -1,119 +1,102 @@
 "use client";
 
 import { StatCard } from "../StatCard/StatCard";
-import { StatusBadge } from "../StatusBadge/StatusBadge";
 import styles from "./Dashboard.module.css";
 import { DataTable } from "@/components/DataTable/DataTable";
-import type { Car } from "@/types/car";
-import type { Rental } from "@/types/rental";
-import { formatDate, getToday, parseDate } from "@/utils/date";
-import Link from "next/link";
+import type { DashboardData } from "@/types/dashboard";
+import { formatCurrency } from "@/utils/currency";
+import { formatDate } from "@/utils/date";
 import { useRouter } from "next/navigation";
 
-function isActiveRental(rental: Rental): boolean {
-  return rental.status === "active";
-}
-
-function isAvailableCar(car: Car): boolean {
-  return car.status === "available";
-}
-
-function isOverdue(rental: Rental): boolean {
-  return isActiveRental(rental) && parseDate(rental.endDate) < getToday();
-}
-
-export default function Dashboard({ cars, rentals }: { cars: Car[]; rentals: Rental[] }) {
-  const activeRentals = rentals.filter(isActiveRental);
-  const overdueRentals = activeRentals.filter(isOverdue);
-
-  const availableCars = cars.filter(isAvailableCar);
-
+export default function Dashboard({ data }: { data: DashboardData }) {
   const router = useRouter();
-
-  const attentionRentals = [...activeRentals]
-    .sort((a, b) => {
-      return (
-        Number(isOverdue(b)) - Number(isOverdue(a)) ||
-        parseDate(a.endDate).getTime() - parseDate(b.endDate).getTime()
-      );
-    })
-    .slice(0, 10);
+  const { summary } = data;
 
   return (
     <main className="page-container">
       <header className={styles.header}>
-        <h1 className="page-title">Головна</h1>
-        <p className="page-subtitle">Огляд роботи пункту прокату</p>
+        <div>
+          <h1 className="page-title">Головна</h1>
+          <p className="page-subtitle">Огляд роботи пункту прокату</p>
+        </div>
+
+        <button className="button-primary" onClick={() => router.push("/rentals/new")}>
+          <span>+</span>
+          Нова оренда
+        </button>
       </header>
 
       <section className={styles.stats}>
-        <StatCard title="Автомобілі" value={cars.length} description="Усього в автопарку" />
-        <StatCard title="Доступні" value={availableCars.length} description="Готові до оренди" />
+        <StatCard
+          title="Вільні автомобілі"
+          value={`${summary.availableCars} з ${summary.totalCars}`}
+          description="Готові до оренди"
+        />
         <StatCard
           title="Активні оренди"
-          value={activeRentals.length}
-          description="Автомобілі зараз в оренді"
+          value={summary.activeRentals}
+          description="Автомобілі зараз у клієнтів"
         />
         <StatCard
           title="Прострочені"
-          value={overdueRentals.length}
+          value={summary.overdueRentals}
           description="Потребують уваги"
+        />
+        <StatCard
+          title="Надходження за місяць"
+          value={formatCurrency(summary.monthIncome)}
+          description={`Борг клієнтів: ${formatCurrency(summary.totalDebt)}`}
         />
       </section>
 
-      <section className={styles.section}>
-        <div className={styles.sectionHeader}>
-          <div>
-            <h2 className={styles.sectionTitle}>Оренди, які потребують уваги</h2>
+      <section className={styles.grid}>
+        <DataTable
+          title="Прострочені повернення"
+          rows={data.overdueRentals}
+          onRowClick={rental => router.push(`/rentals/${rental.id}`)}
+          columns={[
+            { header: "Клієнт", render: row => row.customerName },
+            { header: "Автомобіль", render: row => row.carName },
+            { header: "Мав повернутися", render: row => formatDate(row.endDate) },
+            { header: "Днів", render: row => row.daysOverdue }
+          ]}
+          emptyMessage="Прострочених оренд немає"
+        />
 
-            <p className={styles.sectionDescription}>
-              Поточні оренди та автомобілі, які потрібно повернути
-            </p>
-          </div>
+        <DataTable
+          title="Повернення найближчі 7 днів"
+          rows={data.upcomingReturns}
+          onRowClick={rental => router.push(`/rentals/${rental.id}`)}
+          columns={[
+            { header: "Клієнт", render: row => row.customerName },
+            { header: "Автомобіль", render: row => row.carName },
+            { header: "Дата", render: row => formatDate(row.date) }
+          ]}
+          emptyMessage="Найближчим часом повернень немає"
+        />
 
-          <Link href="/rentals/new" className="button-primary">
-            <span>+</span>
-            Нова оренда
-          </Link>
-        </div>
+        <DataTable
+          title="Видачі найближчі 7 днів"
+          rows={data.upcomingPickups}
+          onRowClick={rental => router.push(`/rentals/${rental.id}`)}
+          columns={[
+            { header: "Клієнт", render: row => row.customerName },
+            { header: "Автомобіль", render: row => row.carName },
+            { header: "Дата початку", render: row => formatDate(row.date) }
+          ]}
+          emptyMessage="Найближчим часом видач немає"
+        />
 
-        <div className={styles.tableWrapper}>
-          <DataTable
-            title="Активні оренди"
-            rows={attentionRentals}
-            columns={[
-              {
-                header: "Клієнт",
-                render: rental => rental.customerName
-              },
-              {
-                header: "Автомобіль",
-                render: rental => rental.carName
-              },
-              {
-                header: "Дата повернення",
-                render: rental => formatDate(rental.endDate)
-              },
-              {
-                header: "Статус",
-                render: rental => (
-                  <StatusBadge
-                    label={isOverdue(rental) ? "Прострочена" : "Активна"}
-                    variant={isOverdue(rental) ? "danger" : "success"}
-                  />
-                )
-              }
-            ]}
-            emptyMessage="Немає активних оренд"
-            onRowClick={rental => router.push(`/rentals/${rental.id}`)}
-          />
-        </div>
-
-        <div className={styles.tableFooter}>
-          <Link href="/rentals" className={styles.viewAll}>
-            Переглянути всі оренди →
-          </Link>
-        </div>
+        <DataTable
+          title="Найбільші борги клієнтів"
+          rows={data.debtors}
+          columns={[
+            { header: "Клієнт", render: row => row.customerName },
+            { header: "Телефон", render: row => row.phone },
+            { header: "Борг", render: row => formatCurrency(row.debt) }
+          ]}
+          emptyMessage="Заборгованостей немає"
+        />
       </section>
     </main>
   );
