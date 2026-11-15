@@ -1,0 +1,34 @@
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.edit {
+    color: var(--primary);
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.delete {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--danger);
+    font-size: 14px;
+}
+
+.edit:hover,
+.delete:hover {
+    text-decoration: underline;
+}
+
+.delete:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.error {
+    color: var(--danger);
+    font-size: 12px;
+}

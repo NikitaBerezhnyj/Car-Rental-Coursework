@@ -1,0 +1,16 @@
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.label {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.wide {
+    grid-column: 1 / -1;
+}
