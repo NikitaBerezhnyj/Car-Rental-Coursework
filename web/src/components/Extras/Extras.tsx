@@ -1,4 +1,6 @@
+import { RowActions } from "../RowActions/RowActions";
 import styles from "./Extras.module.css";
+import { deleteExtra } from "@/actions/extraActions";
 import type { Column } from "@/components/DataTable/DataTable";
 import { DataTable } from "@/components/DataTable/DataTable";
 import type { Extra } from "@/types/extra";
@@ -21,7 +23,13 @@ export function Extras({ extras }: ExtrasProps) {
     },
     {
       header: "Дії",
-      render: () => <span className={styles.placeholder}>—</span>
+      render: extra => (
+        <RowActions
+          id={extra.id}
+          editHref={`/extras/${extra.id}/edit`}
+          deleteAction={deleteExtra}
+        />
+      )
     }
   ];
 
