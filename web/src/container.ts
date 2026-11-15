@@ -1,3 +1,5 @@
+import { ReportRepository } from "./repositories/reportRepository";
+import { ReportService } from "./services/reportService";
 import { CarCategoryRepository } from "@/repositories/carCategoryRepository";
 import { CarRepository } from "@/repositories/carRepository";
 import { CustomerRepository } from "@/repositories/customerRepository";
@@ -17,18 +19,17 @@ import { PaymentService } from "@/services/paymentService";
 import { RentalExtraService } from "@/services/rentalExtraService";
 import { RentalService } from "@/services/rentalService";
 
-export const carCategoryService = new CarCategoryService(
-  new CarCategoryRepository(),
-);
+export const carCategoryService = new CarCategoryService(new CarCategoryRepository());
 export const carService = new CarService(new CarRepository());
 export const customerService = new CustomerService(new CustomerRepository());
 export const employeeService = new EmployeeService(new EmployeeRepository());
 export const extraService = new ExtraService(new ExtraRepository());
-export const maintenanceService = new MaintenanceService(
-  new MaintenanceRepository(),
-);
+export const maintenanceService = new MaintenanceService(new MaintenanceRepository());
 export const paymentService = new PaymentService(new PaymentRepository());
-export const rentalExtraService = new RentalExtraService(
-  new RentalExtraRepository(),
-);
-export const rentalService = new RentalService(new RentalRepository());
+
+const rentalExtraRepository = new RentalExtraRepository();
+
+export const rentalExtraService = new RentalExtraService(rentalExtraRepository);
+export const rentalService = new RentalService(new RentalRepository(), rentalExtraRepository);
+
+export const reportService = new ReportService(new ReportRepository());
