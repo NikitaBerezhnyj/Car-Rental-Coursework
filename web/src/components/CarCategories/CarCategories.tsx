@@ -1,4 +1,6 @@
+import { RowActions } from "../RowActions/RowActions";
 import styles from "./CarCategories.module.css";
+import { deleteCarCategory } from "@/actions/carCategoryActions";
 import type { Column } from "@/components/DataTable/DataTable";
 import { DataTable } from "@/components/DataTable/DataTable";
 import type { CarCategory } from "@/types/carCategory";
@@ -21,7 +23,13 @@ export function CarCategories({ categories }: CarCategoriesProps) {
     },
     {
       header: "Дії",
-      render: () => <span className={styles.placeholder}>—</span>
+      render: category => (
+        <RowActions
+          id={category.id}
+          editHref={`/settings/categories/${category.id}/edit`}
+          deleteAction={deleteCarCategory}
+        />
+      )
     }
   ];
 
