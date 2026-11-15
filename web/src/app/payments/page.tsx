@@ -1,18 +1,25 @@
 import { LoadingState } from "@/components/LoadingState/LoadingState";
 import { Payments } from "@/components/Payments/Payments";
-import { paymentService, rentalService } from "@/container";
+import { paymentService } from "@/container";
+import { parseSearchFilters } from "@/schemas/filterSchemas";
+import type { SearchParams } from "@/types/filters";
 import { Suspense } from "react";
 
-async function PaymentsContent() {
-  const [payments, rentals] = await Promise.all([paymentService.list(), rentalService.list()]);
+type PageProps = {
+  searchParams: Promise<SearchParams>;
+};
 
-  return <Payments payments={payments} rentals={rentals} />;
+async function PaymentsContent({ searchParams }: PageProps) {
+  const filters = parseSearchFilters(await searchParams);
+  const payments = await paymentService.list(filters);
+
+  return <Payments payments={payments} search={filters.search ?? ""} />;
 }
 
-export default function PaymentsPage() {
+export default function PaymentsPage({ searchParams }: PageProps) {
   return (
     <Suspense fallback={<LoadingState message="Завантаження оплат..." />}>
-      <PaymentsContent />
+      <PaymentsContent searchParams={searchParams} />
     </Suspense>
   );
 }

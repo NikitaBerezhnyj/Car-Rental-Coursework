@@ -1,47 +1,24 @@
 "use client";
 
 import styles from "./Payments.module.css";
+import { deletePayment } from "@/actions/paymentActions";
 import type { Column } from "@/components/DataTable/DataTable";
 import { DataTable } from "@/components/DataTable/DataTable";
-import type { Payment, PaymentMethod } from "@/types/payment";
-import type { Rental } from "@/types/rental";
+import { RowActions } from "@/components/RowActions/RowActions";
+import { useUrlFilters } from "@/hooks/useUrlFilters";
+import { type Payment, PAYMENT_METHOD_LABELS } from "@/types/payment";
 import { formatCurrency } from "@/utils/currency";
 import { formatDate } from "@/utils/date";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 type PaymentsProps = {
   payments: Payment[];
-  rentals: Rental[];
+  search: string;
 };
 
-const METHOD_LABELS: Record<PaymentMethod, string> = {
-  cash: "Готівка",
-  card: "Картка"
-};
-
-export function Payments({ payments, rentals }: PaymentsProps) {
-  const [search, setSearch] = useState("");
-
-  const rentalsById = useMemo(() => new Map(rentals.map(rental => [rental.id, rental])), [rentals]);
-
-  const filteredPayments = useMemo(() => {
-    const normalizedSearch = search.trim().toLowerCase();
-
-    if (!normalizedSearch) {
-      return payments;
-    }
-
-    return payments.filter(payment => {
-      const rental = rentalsById.get(payment.rentalId);
-      const customerName = rental?.customerName ?? "";
-      const rentalNumber = String(payment.rentalId);
-
-      return (
-        rentalNumber.includes(normalizedSearch) ||
-        customerName.toLowerCase().includes(normalizedSearch)
-      );
-    });
-  }, [payments, rentalsById, search]);
+export function Payments({ payments, search }: PaymentsProps) {
+  const { updateDebounced } = useUrlFilters();
+  const [searchText, setSearchText] = useState(search);
 
   const columns: Column<Payment>[] = [
     {
@@ -52,7 +29,7 @@ export function Payments({ payments, rentals }: PaymentsProps) {
     },
     {
       header: "Клієнт",
-      render: payment => rentalsById.get(payment.rentalId)?.customerName ?? "—"
+      render: payment => payment.customerName
     },
     {
       header: "Сума",
@@ -60,11 +37,15 @@ export function Payments({ payments, rentals }: PaymentsProps) {
     },
     {
       header: "Спосіб",
-      render: payment => METHOD_LABELS[payment.method]
+      render: payment => PAYMENT_METHOD_LABELS[payment.method]
     },
     {
       header: "Дата",
       render: payment => formatDate(payment.paidAt)
+    },
+    {
+      header: "Дії",
+      render: payment => <RowActions id={payment.id} deleteAction={deletePayment} />
     }
   ];
 
@@ -80,8 +61,11 @@ export function Payments({ payments, rentals }: PaymentsProps) {
       <div className={styles.toolbar}>
         <input
           type="search"
-          value={search}
-          onChange={event => setSearch(event.target.value)}
+          value={searchText}
+          onChange={event => {
+            setSearchText(event.target.value);
+            updateDebounced({ search: event.target.value.trim() });
+          }}
           placeholder="Пошук за клієнтом або номером оренди..."
           className={`form-control ${styles.searchControl}`}
         />
@@ -89,7 +73,7 @@ export function Payments({ payments, rentals }: PaymentsProps) {
 
       <DataTable
         title="Список оплат"
-        rows={filteredPayments}
+        rows={payments}
         columns={columns}
         emptyMessage={search ? "За вашим запитом оплат не знайдено" : "Оплат поки немає"}
       />

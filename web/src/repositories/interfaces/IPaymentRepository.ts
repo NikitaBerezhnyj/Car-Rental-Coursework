@@ -1,5 +1,8 @@
-import type { Payment } from "@/types/payment";
+import { SearchFilters } from "@/types/filters";
+import type { Payment, PaymentInput } from "@/types/payment";
 
 export interface IPaymentRepository {
-  findAll(): Promise<Payment[]>;
+  findAll(filters: SearchFilters): Promise<Payment[]>;
+  create(data: PaymentInput): Promise<void>;
+  delete(id: number): Promise<boolean>;
 }
