@@ -1,20 +1,83 @@
+"use client";
+
 import styles from "./NewRental.module.css";
+import type { Car } from "@/types/car";
+import type { Customer } from "@/types/customer";
+import type { Employee } from "@/types/employee";
+import type { Extra } from "@/types/extra";
+import type { FormState } from "@/types/formState";
+import { formatCurrency } from "@/utils/currency";
+import { countDays } from "@/utils/date";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { type FormEvent, startTransition, useActionState, useState } from "react";
 
-const additionalServices = [
-  {
-    id: "child-seat",
-    name: "Дитяче крісло",
-    price: 100
-  },
-  {
-    id: "gps",
-    name: "GPS-навігатор",
-    price: 50
+type NewRentalProps = {
+  customers: Customer[];
+  employees: Employee[];
+  extras: Extra[];
+  cars: Car[];
+  minDate: string;
+  initialStartDate: string;
+  initialEndDate: string;
+  initialCustomerId?: string;
+  action: (state: FormState, formData: FormData) => Promise<FormState>;
+};
+
+const initialState: FormState = { error: null };
+
+export function NewRental({
+  customers,
+  employees,
+  extras,
+  cars,
+  minDate,
+  initialStartDate,
+  initialEndDate,
+  initialCustomerId,
+  action
+}: NewRentalProps) {
+  const router = useRouter();
+  const [state, formAction, pending] = useActionState(action, initialState);
+
+  const [startDate, setStartDate] = useState(initialStartDate);
+  const [endDate, setEndDate] = useState(initialEndDate);
+  const [carId, setCarId] = useState("");
+  const [extraIds, setExtraIds] = useState<number[]>([]);
+
+  const selectedCar = cars.find(car => String(car.id) === carId);
+  const selectedExtras = extras.filter(extra => extraIds.includes(extra.id));
+
+  const isPeriodValid = startDate !== "" && endDate !== "" && endDate >= startDate;
+  const days = isPeriodValid ? countDays(startDate, endDate) : 0;
+
+  const rentalCost = selectedCar ? days * selectedCar.dailyRate : 0;
+  const extrasCost = days * selectedExtras.reduce((sum, extra) => sum + extra.dailyPrice, 0);
+
+  // Період зберігається в адресі: сервер повертає автомобілі, вільні на ці дати
+  function changePeriod(nextStartDate: string, nextEndDate: string) {
+    setStartDate(nextStartDate);
+    setEndDate(nextEndDate);
+
+    if (nextStartDate !== "" && nextEndDate !== "" && nextEndDate >= nextStartDate) {
+      router.replace(`/rentals/new?startDate=${nextStartDate}&endDate=${nextEndDate}`, {
+        scroll: false
+      });
+    }
   }
-];
 
-export function NewRental() {
+  function toggleExtra(id: number) {
+    setExtraIds(current =>
+      current.includes(id) ? current.filter(item => item !== id) : [...current, id]
+    );
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    startTransition(() => formAction(formData));
+  }
+
   return (
     <main className={styles.page}>
       <header className={styles.header}>
@@ -26,25 +89,39 @@ export function NewRental() {
         </div>
       </header>
 
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Клієнт</h2>
 
           <div className={styles.field}>
-            <label htmlFor="customer" className={styles.label}>
+            <label htmlFor="customerId" className={styles.label}>
               Клієнт
             </label>
 
-            <select id="customer" name="customer" className={styles.input} defaultValue="">
+            <select
+              id="customerId"
+              name="customerId"
+              className={styles.input}
+              defaultValue={initialCustomerId ?? ""}
+            >
               <option value="" disabled>
                 Оберіть клієнта
               </option>
-              <option value="1">Іваненко Іван</option>
-              <option value="2">Петренко Олена</option>
+
+              {customers.map(customer => (
+                <option key={customer.id} value={customer.id}>
+                  {customer.lastName} {customer.firstName} — {customer.phone}
+                </option>
+              ))}
             </select>
           </div>
 
-          <Link href="/customers" className={styles.textLink}>
+          <Link
+            href={`/customers/new?returnTo=${encodeURIComponent(
+              `/rentals/new?startDate=${startDate}&endDate=${endDate}`
+            )}`}
+            className={styles.textLink}
+          >
             + Додати нового клієнта
           </Link>
         </section>
@@ -62,8 +139,13 @@ export function NewRental() {
                 id="startDate"
                 name="startDate"
                 type="date"
+                min={minDate}
                 className={styles.input}
-                defaultValue="2026-11-12"
+                value={startDate}
+                onChange={event => {
+                  const value = event.target.value;
+                  changePeriod(value, endDate < value ? value : endDate);
+                }}
               />
             </div>
 
@@ -76,8 +158,10 @@ export function NewRental() {
                 id="endDate"
                 name="endDate"
                 type="date"
+                min={startDate || minDate}
                 className={styles.input}
-                defaultValue="2026-11-15"
+                value={endDate}
+                onChange={event => changePeriod(startDate, event.target.value)}
               />
             </div>
           </div>
@@ -87,38 +171,56 @@ export function NewRental() {
           <h2 className={styles.sectionTitle}>Автомобіль</h2>
 
           <div className={styles.field}>
-            <label htmlFor="car" className={styles.label}>
-              Автомобіль
+            <label htmlFor="carId" className={styles.label}>
+              Вільні автомобілі на обраний період
             </label>
 
-            <select id="car" name="car" className={styles.input} defaultValue="">
+            <select
+              id="carId"
+              name="carId"
+              className={styles.input}
+              value={selectedCar ? carId : ""}
+              onChange={event => setCarId(event.target.value)}
+            >
               <option value="" disabled>
                 Оберіть автомобіль
               </option>
-              <option value="1">Toyota Corolla — AA 1234 BB</option>
-              <option value="2">Volkswagen Passat — KA 5678 CC</option>
+
+              {cars.map(car => (
+                <option key={car.id} value={car.id}>
+                  {car.brand} {car.model} — {car.plateNumber} · {car.categoryName} (
+                  {formatCurrency(car.dailyRate)} / доба)
+                </option>
+              ))}
             </select>
           </div>
+
+          {cars.length === 0 && (
+            <p className={styles.hint}>На обраний період вільних автомобілів немає</p>
+          )}
         </section>
 
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Додаткові послуги</h2>
 
           <div className={styles.services}>
-            {additionalServices.map(service => (
-              <label key={service.id} className={styles.service}>
+            {extras.map(extra => (
+              <label key={extra.id} className={styles.service}>
                 <span className={styles.serviceInfo}>
                   <input
                     type="checkbox"
-                    name="services"
-                    value={service.id}
-                    defaultChecked
+                    name="extraIds"
+                    value={extra.id}
+                    checked={extraIds.includes(extra.id)}
+                    onChange={() => toggleExtra(extra.id)}
                     className={styles.checkbox}
                   />
-                  <span className={styles.serviceName}>{service.name}</span>
+                  <span className={styles.serviceName}>{extra.name}</span>
                 </span>
 
-                <span className={styles.servicePrice}>{service.price} грн/доба</span>
+                <span className={styles.servicePrice}>
+                  {formatCurrency(extra.dailyPrice)} / доба
+                </span>
               </label>
             ))}
           </div>
@@ -128,16 +230,20 @@ export function NewRental() {
           <h2 className={styles.sectionTitle}>Працівник</h2>
 
           <div className={styles.field}>
-            <label htmlFor="employee" className={styles.label}>
+            <label htmlFor="employeeId" className={styles.label}>
               Відповідальний працівник
             </label>
 
-            <select id="employee" name="employee" className={styles.input} defaultValue="">
+            <select id="employeeId" name="employeeId" className={styles.input} defaultValue="">
               <option value="" disabled>
                 Оберіть працівника
               </option>
-              <option value="1">Петренко Олена</option>
-              <option value="2">Шевченко Андрій</option>
+
+              {employees.map(employee => (
+                <option key={employee.id} value={employee.id}>
+                  {employee.lastName} {employee.firstName} — {employee.position}
+                </option>
+              ))}
             </select>
           </div>
         </section>
@@ -147,28 +253,36 @@ export function NewRental() {
 
           <div className={styles.summaryRows}>
             <div className={styles.summaryRow}>
-              <span>Оренда автомобіля</span>
-              <span>3 000 грн</span>
+              <span>Оренда автомобіля{days > 0 ? ` (${days} дн.)` : ""}</span>
+              <span>{formatCurrency(rentalCost)}</span>
             </div>
 
             <div className={styles.summaryRow}>
               <span>Додаткові послуги</span>
-              <span>450 грн</span>
+              <span>{formatCurrency(extrasCost)}</span>
             </div>
           </div>
 
           <div className={styles.total}>
             <span>Загальна вартість</span>
-            <span>3 450 грн</span>
+            <span>{formatCurrency(rentalCost + extrasCost)}</span>
           </div>
+
+          <p className={styles.hint}>Вартість попередня: остаточну розраховує сервер.</p>
         </section>
+
+        {state.error && (
+          <p className={styles.error} role="alert">
+            {state.error}
+          </p>
+        )}
 
         <div className={styles.actions}>
           <Link href="/rentals" className={styles.cancelButton}>
             Скасувати
           </Link>
 
-          <button type="button" className={styles.submitButton}>
+          <button type="submit" className={styles.submitButton} disabled={pending}>
             Створити оренду
           </button>
         </div>

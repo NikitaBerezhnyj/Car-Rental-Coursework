@@ -201,6 +201,21 @@
     padding-top: 4px;
 }
 
+.hint {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.error {
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    background: var(--danger-soft);
+    color: var(--danger);
+    font-size: 14px;
+}
+
 .cancelButton,
 .submitButton {
     display: inline-flex;
@@ -237,6 +252,11 @@
 
 .submitButton:hover {
     background: var(--primary-hover);
+}
+
+.submitButton:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 @media (max-width: 640px) {

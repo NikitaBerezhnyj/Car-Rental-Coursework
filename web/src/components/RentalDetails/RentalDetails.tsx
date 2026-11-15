@@ -1,6 +1,9 @@
+import { ActionButton } from "../ActionButton/ActionButton";
 import { StatusBadge, type StatusBadgeVariant } from "../StatusBadge/StatusBadge";
 import styles from "./RentalDetails.module.css";
-import type { Rental, RentalStatus } from "@/types/rental";
+import { cancelRental, issueRental, returnRental } from "@/actions/rentalActions";
+import type { RentalStatus, RentalWithExtras } from "@/types/rental";
+import { formatCurrency } from "@/utils/currency";
 import { formatDate } from "@/utils/date";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -41,7 +44,9 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-export function RentalDetails({ rental }: { rental: Rental }) {
+export function RentalDetails({ rental }: { rental: RentalWithExtras }) {
+  const canRegisterPayment = rental.status !== "cancelled" && rental.balance > 0;
+
   return (
     <main className="page-container">
       <nav className={styles.breadcrumbs}>
@@ -65,13 +70,14 @@ export function RentalDetails({ rental }: { rental: Rental }) {
         </div>
 
         <div className={styles.headerActions}>
-          <button className={styles.secondaryButton} disabled>
-            Редагувати
-          </button>
-
-          <button className={styles.dangerButton} disabled>
-            Скасувати оренду
-          </button>
+          <ActionButton
+            id={rental.id}
+            label="Скасувати оренду"
+            className={styles.dangerButton}
+            action={cancelRental}
+            confirmMessage="Скасувати оренду?"
+            disabled={rental.status !== "booked"}
+          />
         </div>
       </header>
 
@@ -92,39 +98,61 @@ export function RentalDetails({ rental }: { rental: Rental }) {
       </Section>
 
       <Section title="Додаткові послуги">
-        <div className={styles.emptyState}>
-          <p>Додаткові послуги поки не завантажуються.</p>
-          <span>Тут відображатимуться послуги, додані до цієї оренди.</span>
-        </div>
+        {rental.extras.length > 0 ? (
+          <div className={styles.paymentSummary}>
+            {rental.extras.map(extra => (
+              <div key={extra.id} className={styles.paymentRow}>
+                <span>{extra.extraName}</span>
+                <strong>{formatCurrency(extra.price)} / доба</strong>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className={styles.emptyState}>
+            <p>Додаткових послуг немає</p>
+          </div>
+        )}
       </Section>
 
       <Section title="Оплата">
         <div className={styles.paymentSummary}>
           <div className={styles.paymentRow}>
+            <span>Оренда ({rental.days} дн.)</span>
+            <strong>{formatCurrency(rental.rentalCost)}</strong>
+          </div>
+
+          <div className={styles.paymentRow}>
+            <span>Додаткові послуги</span>
+            <strong>{formatCurrency(rental.extrasCost)}</strong>
+          </div>
+
+          <div className={styles.paymentRow}>
             <span>Загальна вартість</span>
-            <strong>—</strong>
+            <strong>{formatCurrency(rental.totalCost)}</strong>
           </div>
 
           <div className={styles.paymentRow}>
             <span>Сплачено</span>
-            <strong>—</strong>
+            <strong>{formatCurrency(rental.paidAmount)}</strong>
           </div>
 
           <div className={`${styles.paymentRow} ${styles.balanceRow}`}>
             <span>Залишок до сплати</span>
-            <strong>—</strong>
+            <strong>{formatCurrency(rental.balance)}</strong>
           </div>
         </div>
 
         <div className={styles.sectionActions}>
-          <button className={styles.primaryButton} disabled>
-            + Зареєструвати оплату
-          </button>
+          {canRegisterPayment ? (
+            <Link href={`/rentals/${rental.id}/payments/new`} className={styles.primaryButton}>
+              + Зареєструвати оплату
+            </Link>
+          ) : (
+            <button className={styles.primaryButton} disabled>
+              + Зареєструвати оплату
+            </button>
+          )}
         </div>
-
-        <p className={styles.note}>
-          Інформація про платежі буде доступна після підключення відповідних даних.
-        </p>
       </Section>
 
       <Section title="Дії з автомобілем">
@@ -134,9 +162,14 @@ export function RentalDetails({ rental }: { rental: Rental }) {
             <span>Підтвердження передачі автомобіля клієнту.</span>
           </div>
 
-          <button className={styles.secondaryButton} disabled>
-            Видати автомобіль
-          </button>
+          <ActionButton
+            id={rental.id}
+            label="Видати автомобіль"
+            className={styles.secondaryButton}
+            action={issueRental}
+            confirmMessage="Видати автомобіль клієнту?"
+            disabled={rental.status !== "booked"}
+          />
         </div>
 
         <div className={styles.vehicleActions}>
@@ -145,9 +178,14 @@ export function RentalDetails({ rental }: { rental: Rental }) {
             <span>Реєстрація повернення автомобіля після завершення оренди.</span>
           </div>
 
-          <button className={styles.secondaryButton} disabled>
-            Зареєструвати повернення
-          </button>
+          <ActionButton
+            id={rental.id}
+            label="Зареєструвати повернення"
+            className={styles.secondaryButton}
+            action={returnRental}
+            confirmMessage="Підтвердити повернення автомобіля?"
+            disabled={rental.status !== "active"}
+          />
         </div>
       </Section>
 

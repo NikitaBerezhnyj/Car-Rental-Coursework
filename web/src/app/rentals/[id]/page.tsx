@@ -12,9 +12,13 @@ type PageProps = {
 
 async function RentalDetailsContent({ params }: PageProps) {
   const { id } = await params;
-  const rentals = await rentalService.list();
+  const rentalId = Number(id);
 
-  const rental = rentals.find(item => String(item.id) === id);
+  if (!Number.isInteger(rentalId)) {
+    notFound();
+  }
+
+  const rental = await rentalService.getById(rentalId);
 
   if (!rental) {
     notFound();

@@ -13,7 +13,7 @@ const toRentalExtra = (row: RentalExtraRow): RentalExtra => ({
   id: `${row.rental_id}-${row.service_id}`,
   rentalId: row.rental_id,
   extraName: row.extra_name,
-  price: Number(row.price),
+  price: Number(row.price)
 });
 
 export class RentalExtraRepository implements IRentalExtraRepository {
@@ -22,7 +22,19 @@ export class RentalExtraRepository implements IRentalExtraRepository {
       `SELECT rs.rental_id, rs.service_id, s.name AS extra_name, rs.price
        FROM rental_services rs
        JOIN additional_services s USING (service_id)
-       ORDER BY rs.rental_id, rs.service_id`,
+       ORDER BY rs.rental_id, rs.service_id`
+    );
+    return rows.map(toRentalExtra);
+  }
+
+  async findByRentalId(rentalId: number): Promise<RentalExtra[]> {
+    const rows = await query<RentalExtraRow>(
+      `SELECT rs.rental_id, rs.service_id, s.name AS extra_name, rs.price
+       FROM rental_services rs
+       JOIN additional_services s USING (service_id)
+       WHERE rs.rental_id = $1
+       ORDER BY s.name`,
+      [rentalId]
     );
     return rows.map(toRentalExtra);
   }
